@@ -9,7 +9,7 @@ Contact : philippe.mathieu at univ-lille.fr
 In this repository there are 3 jupyter notebooks to understand the set of tools and techniques for serching and evaluate strategies at the iterated prisoner's dilemma (IPD)
 ## The Prisoner's dilemma
 see `gametheory.ipyb`
-`
+
 In this Jupyter notebook we explain the basics of game theory concerning simultaneous games, including payoff matrix notion and the different equilibrium notions. The prisoner's dilemma is just one example among many.
 ## The Iterated Prisoner's dilemma
 see `prisonersdilemma.ipynb`
