@@ -1,8 +1,8 @@
 # ipd
 
-Python code and Jupyter notebook to explain how to experiment computational game theory, buildand evaluate strategies.
+Python code and Jupyter notebook to explain how to experiment computational game theory, build and evaluate strategies.
 
-Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petipre  (CRISTAL, SMAC team, Lille University)
+Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  (CRISTAL, SMAC team, Lille University)
 
 Contact : philippe.mathieu at univ-lille.fr
 
