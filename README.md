@@ -11,11 +11,11 @@ In this repository there are 3 jupyter notebooks in Python which contain both ex
 ## The Prisoner's dilemma
 see `gametheory.ipyb`
 
-In this Jupyter notebook we explain the basics of game theory concerning simultaneous games, including payoff matrix notion and the different equilibrium notions. The prisoner's dilemma is just one example among many.
+In this Jupyter notebook we explain the basics of game theory concerning simultaneous games, including payoff matrix notion and the different equilibrium notions. In this notebook the prisoner's dilemma is just one example among many.
 ## The Iterated Prisoner's dilemma
 see `prisonersdilemma.ipynb`
 
-We focus in this Jupyter Notebook on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided.
+We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. Strategies can now learn from the past. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided.
 
 ## Machine learning for the IPD
 see `ipd_machinelearning.ipynb`
