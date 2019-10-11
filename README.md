@@ -2,7 +2,7 @@
 
 Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD)
 
-Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
+Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
 
 Contact : philippe.mathieu at univ-lille.fr
 
