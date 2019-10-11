@@ -8,14 +8,19 @@ Contact : philippe.mathieu at univ-lille.fr
 
 In this repository there are 3 jupyter notebooks to understand the set of tools and techniques for serching and evaluate strategies at the iterated prisoner's dilemma (IPD)
 # The Prisoner's dilemma
-see gametheory.ipynb
+see `gametheory.ipyb`
+`
 In this Jupyter notebook we explain the basics of game theory concerning simultaneous games, including payoff matrix notion and the different equilibrium notions. The prisoner's dilemma is just one example among many.
 # The Iterated Prisoner's dilemma
+see `prisonersdilemma.ipynb`
+
 We focus in this Jupyter Notebook on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the prévious one. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided
-see prisonersdilemma.ipynb
+
 # Machine learning for the IPD
+see `ipd_machinelearning.ipynb`
+
 In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies
-see ipd_machinelearning.ipynb
+
 # Bibliography
 - Philippe Mathieu, Jean-Paul Delahaye Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma
 Simulation Modelling Practice and Theory, Elsevier, 2019
