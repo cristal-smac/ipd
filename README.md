@@ -15,12 +15,12 @@ In this Jupyter notebook we explain the basics of game theory concerning simulta
 ## The Iterated Prisoner's dilemma
 see `prisonersdilemma.ipynb`
 
-We focus in this Jupyter Notebook on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided
+We focus in this Jupyter Notebook on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided.
 
 ## Machine learning for the IPD
 see `ipd_machinelearning.ipynb`
 
-In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies
+In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies.
 
 ## Bibliography
 - Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, 2019
