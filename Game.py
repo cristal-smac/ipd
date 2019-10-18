@@ -62,7 +62,7 @@ class Game:
                     lignesDominees += [i]
                     findDominated = True
                 if self.compare(ligne2, ligne1, colonnesDominees, strict):
-                    ligneDominees += [i+1]
+                    lignesDominees += [i+1]
                     findDominated = True
             #on regarde les colonnes dominées
             
