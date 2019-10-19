@@ -59,11 +59,13 @@ class Game:
                 ligne1 = self.scores['x'][i]
                 ligne2 = self.scores['x'][i+1]
                 if self.compare(ligne1, ligne2, colonnesDominees, strict):
-                    lignesDominees += [i]
-                    findDominated = True
+                    if (i not in lignesDominees) : 
+                        lignesDominees += [i]
+                        findDominated = True
                 if self.compare(ligne2, ligne1, colonnesDominees, strict):
-                    lignesDominees += [i+1]
-                    findDominated = True
+                    if (i+1 not in lignesDominees) : 
+                        lignesDominees += [i+1]
+                        findDominated = True
             #on regarde les colonnes dominées
             
             if (self.asymetrical):
@@ -74,11 +76,13 @@ class Game:
                 c1 = self.scores['y'].transpose()[i]
                 c2 = self.scores['y'].transpose()[i+1]
                 if self.compare(c1, c2, lignesDominees, strict):
-                    colonnesDominees += [i]
-                    findDominated = True
+                    if (i not in colonnesDominees):
+                        colonnesDominees += [i]
+                        findDominated = True
                 if self.compare(c2, c1, lignesDominees, strict):
-                    colonnesDominees += [i+1]
-                    findDominated = True
+                    if (i+1 not in colonnesDominees):
+                        colonnesDominees += [i+1]
+                        findDominated = True
         return self.result(lignesDominees, colonnesDomineesl)
     
     def compare(self, l1,l2, tab, strict):
