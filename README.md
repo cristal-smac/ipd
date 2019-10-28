@@ -31,3 +31,12 @@ In this Jupyter Notebook we show how to use "machine learning" technics to ident
 - Bruno Beaufils, Jean-Paul Delahaye, Philippe Mathieu. **Complete Classes of Strategies for the Classical Iterated Prisoner's Dilemma**. Evolutionnary Programming VII (EP'7), 1998, undef, France. pp.33--41
 - Bruno Beaufils, Jean-Paul Delahaye, Philippe Mathieu. **Our Meeting with Gradual, A Good Strategy for the Iterated Prisoner's Dilemma**. Proceedings of the Fifth International Workshop on the Synthesis and Simulation of Living Systems (ALIFE'5), 1996, Cambridge, MA, USA, France. pp.202--209
 
+# License
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.
+If not, see http://www.gnu.org/licenses/.
