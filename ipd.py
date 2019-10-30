@@ -201,8 +201,8 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
     res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["Meilleure place", "Pire place", "RankAvg", "RankStd"])   
     sousEnsembles = list(itertools.combinations(soupe, n))
     ranks = dict()
-    meilleureComp = []
-    pireComp = []
+    bestComp = []
+    worstComp = []
     for s in sousEnsembles:  
         e = Ecological(g, list(s) + [strategy])
         e.run()
@@ -212,11 +212,11 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
             if (math.isnan(res.at[strat.name, "Meilleure place"]) or classement < res.at[strat.name, "Meilleure place"]):
                 res.at[strat.name, "Meilleure place"] = classement
                 if (strat == strategy):
-                    meilleureComp = list(s) + [strategy]
+                    bestComp = list(s) + [strategy]
             if (math.isnan(res.at[strat.name, "Pire place"]) or classement > res.at[strat.name, "Pire place"]):
                 res.at[strat.name, "Pire place"] = classement 
                 if (strat == strategy):
-                    pireComp = list(s) + [strategy]
+                    worstComp = list(s) + [strategy]
             if (strat.name in ranks.keys()):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
@@ -231,7 +231,7 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
     else : 
         print("Classement de la stratégie : "+strategy.name)
         print(res.loc[strategy.name,:])
-    return meilleureComp, pireComp, strategy
+    return bestComp, worstComp, strategy
 
 
 
@@ -241,8 +241,8 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
         return  
     res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["Meilleure place","Pire place", "RankAvg", "RankStd"])
     ranks = dict()
-    meilleureComp = []
-    pireComp = []
+    bestComp = []
+    worstComp = []
     for i in range (0, p) : 
         #print("Competition "+str(i+1)+ "/"+str(p))
         strategies = []
@@ -263,11 +263,11 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
             if (math.isnan(res.at[strat.name, "Meilleure place"]) or classement < res.at[strat.name, "Meilleure place"]):
                 res.at[strat.name, "Meilleure place"] = classement
                 if (strat == strategy):
-                    meilleureComp = strategies
+                    bestComp = strategies
             if (math.isnan(res.at[strat.name, "Pire place"]) or classement > res.at[strat.name, "Pire place"]):
                 res.at[strat.name, "Pire place"] = classement  
                 if (strat == strategy):
-                    pireComp = strategies
+                    worstComp = strategies
             if (strat.name in ranks.keys()):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
@@ -282,7 +282,7 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
     else : 
         print("Classement de la stratégie : "+strategy.name)
         print(res.loc[strategy.name,:])
-    return meilleureComp, pireComp, strategy
+    return bestComp, worstComp, strategy
 
 
 
