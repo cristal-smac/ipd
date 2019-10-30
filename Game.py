@@ -49,22 +49,22 @@ class Game:
         return res
 
     def getDominantStrategies(self, strict=True):
-        lignesDominees = []
-        colonnesDominees = []
+        dominatedLines = []
+        dominatedColumns = []
         findDominated = True
-        while (findDominated and (len(lignesDominees) != self.size - 1) and (len(colonnesDominees) != self.size - 1)):
+        while (findDominated and (len(dominatedLines) != self.size - 1) and (len(dominatedColumns) != self.size - 1)):
             findDominated = False
             #on regarde les lignes dominées
             for i in range(self.size-1) :
-                ligne1 = self.scores['x'][i]
-                ligne2 = self.scores['x'][i+1]
-                if self.compare(ligne1, ligne2, colonnesDominees, strict):
-                    if (i not in lignesDominees) : 
-                        lignesDominees += [i]
+                line1 = self.scores['x'][i]
+                line2 = self.scores['x'][i+1]
+                if self.compare(line1, line2, dominatedColumns, strict):
+                    if (i not in dominatedLines) : 
+                        dominatedLines += [i]
                         findDominated = True
-                if self.compare(ligne2, ligne1, colonnesDominees, strict):
-                    if (i+1 not in lignesDominees) : 
-                        lignesDominees += [i+1]
+                if self.compare(line2, line1, dominatedColumns, strict):
+                    if (i+1 not in dominatedLines) : 
+                        dominatedLines += [i+1]
                         findDominated = True
             #on regarde les colonnes dominées
             
@@ -75,15 +75,15 @@ class Game:
             for i in range(lenY-1) :
                 c1 = self.scores['y'].transpose()[i]
                 c2 = self.scores['y'].transpose()[i+1]
-                if self.compare(c1, c2, lignesDominees, strict):
-                    if (i not in colonnesDominees):
-                        colonnesDominees += [i]
+                if self.compare(c1, c2, dominatedLines, strict):
+                    if (i not in dominatedColumns):
+                        dominatedColumns += [i]
                         findDominated = True
-                if self.compare(c2, c1, lignesDominees, strict):
-                    if (i+1 not in colonnesDominees):
-                        colonnesDominees += [i+1]
+                if self.compare(c2, c1, dominatedLines, strict):
+                    if (i+1 not in dominatedColumns):
+                        dominatedColumns += [i+1]
                         findDominated = True
-        return self.result(lignesDominees, colonnesDomineesl)
+        return self.result(dominatedLines, dominatedColumnsl)
     
     def compare(self, l1,l2, tab, strict):
         dominated = True
@@ -100,7 +100,7 @@ class Game:
                     dominated = dominated and False
         return dominated   
 
-    def result(self, lignesDominees, colonnesDominees):
+    def result(self, dominatedLines, dominatedColumns):
         x = list()
         y = list()
         res = list()
@@ -108,7 +108,7 @@ class Game:
         colums = list()
         rows = list()
         for i in range(self.size) :
-            if i not in lignesDominees : 
+            if i not in dominatedLines : 
                 x.append(i)
                 colums.append(self.actions[i])            
         if (self.asymetrical):
@@ -116,7 +116,7 @@ class Game:
         else :
             lenY = self.size
         for i in range(lenY) :
-            if i not in colonnesDominees : 
+            if i not in dominatedColumns : 
                 y.append(i)
                 if (self.asymetrical):
                     rows.append(self.actions2[i])
