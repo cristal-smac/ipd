@@ -129,3 +129,10 @@ class Game:
         print(res)
         return Game(tab, colums, rows, True)
 
+    def prettyPrint(self):
+        game = pd.DataFrame(np.nan,self.actions, self.actions, dtype=object) 
+        for i in range (self.size):
+            for j in range (self.size) :
+                game.iat[i,j] = self.scores[i][j]
+        print(game)
+
