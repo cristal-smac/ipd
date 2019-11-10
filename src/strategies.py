@@ -46,6 +46,74 @@ class Tft(Strategy):
 
     def update(self,my,his):
         self.hisPast+=his
+
+class Tf2t(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "tf2t"
+        self.hisPast=""
+        
+    def getAction(self,tick):
+        if (tick==0 or tick==1):
+            return 'C'
+        else :
+            if (self.hisPast[-1] == 'D' and self.hisPast[-2]):
+                return 'D'
+            else :
+                return 'C'
+
+    def clone(self):
+        return Tf2t()
+
+    def update(self,my,his):
+        self.hisPast+=his
+
+class Hardtft(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "hardtft"
+        self.hisPast=""
+        
+    def getAction(self,tick):
+        if (tick==0 or tick==1):
+            return 'C'
+        else :
+            if (self.hisPast[-1] == 'D' or self.hisPast[-2] == 'D'):
+                return 'D'
+            else :
+                return 'C'
+
+    def clone(self):
+        return Hardtft()
+
+    def update(self,my,his):
+        self.hisPast+=his
+
+class Slowtft(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "slowtft"
+        self.hisPast=""
+        self.myPast=""
+        
+    def getAction(self,tick):
+        if (tick==0 or tick==1):
+            return 'C'
+        else :
+            if (self.hisPast[-1] == 'D' and self.hisPast[-2] == 'D' ):
+                return 'D'
+            elif (self.hisPast[-1] == 'C' and self.hisPast[-2] == 'C' ):
+                return 'C'
+            else :
+                return self.myPast[-1]
+            
+
+    def clone(self):
+        return Slowtft()
+
+    def update(self,my,his):
+        self.hisPast+=his
+        self.myPast+=my
     
     
 class Spiteful(Strategy):
@@ -65,6 +133,28 @@ class Spiteful(Strategy):
 
     def clone(self):
         return Spiteful()
+
+    def update(self,my,his):
+        self.myPast+=my
+        self.hisPast+=his
+
+class Mistrust(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "mistrust"
+        self.hisPast=""
+        self.myPast=""
+        
+    def getAction(self,tick):
+        if (tick==0):
+                return 'D'
+        if (self.hisPast[-1]=='D' or self.myPast[-1]=='D') :
+            return 'D'
+        else :
+            return 'C'
+
+    def clone(self):
+        return Mistrust()
 
     def update(self,my,his):
         self.myPast+=my
@@ -183,11 +273,69 @@ class Mem(Strategy):
                 del self.itsMoves[0]
             self.itsMoves.append(itsMove)
 
-def getAllMemory(x,y):
+class Prober(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "prober"
+        self.hisPast=""
+        
+    def getAction(self,tick):
+        if (tick==0):
+            return 'D'
+        elif (tick == 1 or tick == 2):
+            return 'C'
+        else :
+            if (self.hisPast[1] == 'C' and self.hisPast[2] == 'C'):
+                return 'D'
+            else :
+                return self.hisPast[-1]
+                
+    def clone(self):
+        return Prober()
+
+    def update(self,my,his):
+        self.hisPast+=his
+
+class Pavlov(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "pavlov"
+        self.hisPast=""
+        self.myPast=""
+        
+    def getAction(self,tick):
+        if (tick==0):
+            return 'C'
+        else :
+            if (self.hisPast[-1] == self.myPast[-1]):
+                return 'C'
+            else :
+                return 'D'          
+                
+    def clone(self):
+        return Pavlov()
+
+    def update(self,my,his):
+        self.hisPast+=his
+        self.myPast+=my
+
+
+def getMem(x,y):
     if (x+y > 4):
         return "Pas calculable"
     len_genome = max(x,y)+2**(x+y)
     permut = [p for p in itertools.product(['C','D'], repeat=len_genome)]
     genomes = [''.join(p) for p in permut]
     return [Mem(x,y,gen) for gen in genomes]
+
+def getPeriodics(n):
+    cards = ['C','D']
+    periodics = list()
+    for i in range (n+1):
+        periodics += [p for p in itertools.product(cards, repeat=i)]
+    strats = [Periodic(''.join(p)) for p in periodics]
+    return strats[1:]
+
+def getClassicals():
+    return [Periodic('C'), Periodic('D'), Tft(), Spiteful(), SoftMajority(), HardMajority(), Periodic("DDC"), Periodic("CCD"), Mistrust(), Periodic("CD"), Pavlov(), Tf2t(), Hardtft(), Slowtft(), Gradual(), Prober()]
 
