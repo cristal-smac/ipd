@@ -6,6 +6,7 @@ import math
 import matplotlib.pyplot as plt
 import statistics
 import random
+import itertools
 
 
 
@@ -283,6 +284,14 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
         print("Classement de la stratégie : "+strategy.name)
         print(res.loc[strategy.name,:])
     return bestComp, worstComp, strategy
+
+def getAllMemory(x,y):
+    if (x+y > 4):
+        return "Pas calculable"
+    len_genome = max(x,y)+2**(x+y)
+    permut = [p for p in itertools.product(['C','D'], repeat=len_genome)]
+    genomes = [''.join(p) for p in permut]
+    return [Mem(x,y,gen) for gen in genomes]
 
 
 
