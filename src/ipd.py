@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import statistics
 import random
 import itertools
+import Game
 
 
 
@@ -166,7 +167,11 @@ class Ecological:
         plt.ylim(0, 101)
         plt.show()
 
+
 def subClasses(soupe, n):
+    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    g = Game.Game(dip,['C','D'])
+
     if (n > len(soupe)):
         print ("les sous-classes doivent être plus petites que la longueur de n")
         return   
@@ -196,6 +201,10 @@ def subClasses(soupe, n):
           
 
 def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
+
+    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    g = Game.Game(dip,['C','D'])
+
     if (n > len(soupe)):
         print ("les sous-classes doivent être plus petites que la longueur de n")
         return     
@@ -237,6 +246,8 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
 
 
 def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
+    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    g = Game.Game(dip,['C','D'])
     if (n > len(soupe)):
         "Le nombre de stratégies par compétition doit être inférieur ou égal au nombre de stratégies de la soupe initiale"
         return  
