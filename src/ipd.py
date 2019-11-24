@@ -173,11 +173,11 @@ def subClasses(soupe, n):
     g = Game.Game(dip,['C','D'])
 
     if (n > len(soupe)):
-        print ("les sous-classes doivent être plus petites que la longueur de n")
+        print ("the soup size must be smaller than n")
         return   
-    res = pd.DataFrame(np.nan,[s.name for s in soupe], ["Meilleure place","Pire place", "RankAvg", "RankStd"])   
+    res = pd.DataFrame(np.nan,[s.name for s in soupe], ["BestRank","WorstRank", "RankAvg", "RankStd"])   
     for s in soupe:
-        res.at[s.name, "Meilleure place"] = len(soupe)
+        res.at[s.name, "BestRank"] = len(soupe)
     ranks = dict()
     sousEnsembles = list(itertools.combinations(soupe, n))
     for s in sousEnsembles:
@@ -186,10 +186,10 @@ def subClasses(soupe, n):
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in s : 
             classement = classements[strat.name]
-            if (math.isnan(res.at[strat.name, "Meilleure place"]) or classement < res.at[strat.name, "Meilleure place"]):
-                res.at[strat.name, "Meilleure place"] = classement
-            if (math.isnan(res.at[strat.name, "Pire place"]) or classement > res.at[strat.name, "Pire place"]):
-                res.at[strat.name, "Pire place"] = classement  
+            if (math.isnan(res.at[strat.name, "BestRank"]) or classement < res.at[strat.name, "BestRank"]):
+                res.at[strat.name, "BestRank"] = classement
+            if (math.isnan(res.at[strat.name, "WorstRank"]) or classement > res.at[strat.name, "WorstRank"]):
+                res.at[strat.name, "WorstRank"] = classement  
             if (strat.name in ranks.keys()):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
@@ -197,7 +197,7 @@ def subClasses(soupe, n):
     for strat in soupe : 
         res.at[strat.name, "RankAvg"] = statistics.mean(ranks[strat.name])
         res.at[strat.name, "RankStd"] = statistics.stdev(ranks[strat.name])
-    print(res.sort_values(by = ['RankAvg', 'Meilleure place', 'RankStd', 'Pire place'],  ascending = [True, True, True, True ]))
+    print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
           
 
 def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
@@ -206,9 +206,9 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
     g = Game.Game(dip,['C','D'])
 
     if (n > len(soupe)):
-        print ("les sous-classes doivent être plus petites que la longueur de n")
+        print ("the soup size must be smaller than n")
         return     
-    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["Meilleure place", "Pire place", "RankAvg", "RankStd"])   
+    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["BestRank", "WorstRank", "RankAvg", "RankStd"])   
     sousEnsembles = list(itertools.combinations(soupe, n))
     ranks = dict()
     bestComp = []
@@ -219,12 +219,12 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in  list(s) + [strategy] : 
             classement = classements[strat.name]
-            if (math.isnan(res.at[strat.name, "Meilleure place"]) or classement < res.at[strat.name, "Meilleure place"]):
-                res.at[strat.name, "Meilleure place"] = classement
+            if (math.isnan(res.at[strat.name, "BestRank"]) or classement < res.at[strat.name, "BestRank"]):
+                res.at[strat.name, "BestRank"] = classement
                 if (strat == strategy):
                     bestComp = list(s) + [strategy]
-            if (math.isnan(res.at[strat.name, "Pire place"]) or classement > res.at[strat.name, "Pire place"]):
-                res.at[strat.name, "Pire place"] = classement 
+            if (math.isnan(res.at[strat.name, "WorstRank"]) or classement > res.at[strat.name, "WorstRank"]):
+                res.at[strat.name, "WorstRank"] = classement 
                 if (strat == strategy):
                     worstComp = list(s) + [strategy]
             if (strat.name in ranks.keys()):
@@ -237,9 +237,9 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
             if (len(ranks[s.name]) > 1):
                 res.at[s.name, "RankStd"] = statistics.stdev(ranks[s.name])
     if (printAll) :       
-        print(res.sort_values(by = ['RankAvg', 'Meilleure place', 'RankStd', 'Pire place'],  ascending = [True, True, True, True ]))
+        print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
     else : 
-        print("Classement de la stratégie : "+strategy.name)
+        print("Strategy ranking : "+strategy.name)
         print(res.loc[strategy.name,:])
     return bestComp, worstComp, strategy
 
@@ -249,9 +249,9 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
     dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
     g = Game.Game(dip,['C','D'])
     if (n > len(soupe)):
-        "Le nombre de stratégies par compétition doit être inférieur ou égal au nombre de stratégies de la soupe initiale"
+        "the soup size must be smaller than n"
         return  
-    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["Meilleure place","Pire place", "RankAvg", "RankStd"])
+    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["BestRank","WorstRank", "RankAvg", "RankStd"])
     ranks = dict()
     bestComp = []
     worstComp = []
@@ -272,12 +272,12 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in strategies : 
             classement = classements[strat.name]
-            if (math.isnan(res.at[strat.name, "Meilleure place"]) or classement < res.at[strat.name, "Meilleure place"]):
-                res.at[strat.name, "Meilleure place"] = classement
+            if (math.isnan(res.at[strat.name, "BestRank"]) or classement < res.at[strat.name, "BestRank"]):
+                res.at[strat.name, "BestRank"] = classement
                 if (strat == strategy):
                     bestComp = strategies
-            if (math.isnan(res.at[strat.name, "Pire place"]) or classement > res.at[strat.name, "Pire place"]):
-                res.at[strat.name, "Pire place"] = classement  
+            if (math.isnan(res.at[strat.name, "WorstRank"]) or classement > res.at[strat.name, "WorstRank"]):
+                res.at[strat.name, "WorstRank"] = classement  
                 if (strat == strategy):
                     worstComp = strategies
             if (strat.name in ranks.keys()):
@@ -290,9 +290,9 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
             if (len(ranks[s.name]) > 1):
                 res.at[s.name, "RankStd"] = statistics.stdev(ranks[s.name])
     if (printAll) :   
-        print(res.sort_values(by = ['RankAvg', 'Meilleure place', 'RankStd', 'Pire place'],  ascending = [True, True, True, True ]))
+        print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
     else : 
-        print("Classement de la stratégie : "+strategy.name)
+        print("Strategy ranking : "+strategy.name)
         print(res.loc[strategy.name,:])
     return bestComp, worstComp, strategy
 
