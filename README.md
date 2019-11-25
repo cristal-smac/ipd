@@ -16,7 +16,7 @@ In this Jupyter notebook we explain the basics of game theory concerning simulta
 
 ## The Iterated Prisoner's dilemma
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/prisoners_dilemma_fr.ipynb)
-English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/prisoners_dilemma_en.ipynb)
+English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=EN/prisoners_dilemma_en.ipynb)
 
 We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. Strategies can now learn from the past. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided.
 
