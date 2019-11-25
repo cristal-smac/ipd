@@ -169,7 +169,7 @@ class Ecological:
 
 
 def subClasses(soupe, n):
-    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    dip =[(3,3),(0,5),(5,0),(1,1)]   
     g = Game.Game(dip,['C','D'])
 
     if (n > len(soupe)):
@@ -202,7 +202,7 @@ def subClasses(soupe, n):
 
 def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
 
-    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    dip =[(3,3),(0,5),(5,0),(1,1)]  
     g = Game.Game(dip,['C','D'])
 
     if (n > len(soupe)):
@@ -246,7 +246,7 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
 
 
 def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
-    dip =[(3,3),(0,5),(5,0),(1,1)]   # Dilemme du prisonnier
+    dip =[(3,3),(0,5),(5,0),(1,1)]   
     g = Game.Game(dip,['C','D'])
     if (n > len(soupe)):
         "the soup size must be smaller than n"
@@ -256,7 +256,6 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
     bestComp = []
     worstComp = []
     for i in range (0, p) : 
-        #print("Competition "+str(i+1)+ "/"+str(p))
         strategies = []
         strategies.append(strategy)
         indice = [i for i in range (0, len(soupe))]
@@ -264,9 +263,6 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
             indiceStrat = random.choice(indice)
             indice.remove(indiceStrat)
             strategies.append(soupe[indiceStrat])
-        #print("Les stratégies qui jouent sont : ")
-        #for s in strategies :
-            #print(s.name)
         e = Ecological(g, strategies)
         e.run()
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
@@ -298,7 +294,7 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
 
 def getAllMemory(x,y):
     if (x+y > 4):
-        return "Pas calculable"
+        return "Not possible to calculate"
     len_genome = max(x,y)+2**(x+y)
     permut = [p for p in itertools.product(['C','D'], repeat=len_genome)]
     genomes = [''.join(p) for p in permut]
