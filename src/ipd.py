@@ -9,6 +9,8 @@ import random
 import itertools
 import Game
 
+dip =[(3,3),(0,5),(5,0),(1,1)]  
+g = Game.Game(dip,['C','D'])
 
 
 class Meeting :      
@@ -167,21 +169,17 @@ class Ecological:
         plt.ylim(0, 101)
         plt.show()
 
-
-def subClasses(soupe, n):
-    dip =[(3,3),(0,5),(5,0),(1,1)]   
-    g = Game.Game(dip,['C','D'])
-
-    if (n > len(soupe)):
-        print ("the soup size must be smaller than n")
+def subClasses(soup, n, length = 10):
+    if (n > len(soup)):
+        print ("The soup size must be smaller than n")
         return   
-    res = pd.DataFrame(np.nan,[s.name for s in soupe], ["BestRank","WorstRank", "RankAvg", "RankStd"])   
-    for s in soupe:
-        res.at[s.name, "BestRank"] = len(soupe)
+    res = pd.DataFrame(np.nan,[s.name for s in soup], ["BestRank","WorstRank", "RankAvg", "RankStd"])   
+    for s in soup:
+        res.at[s.name, "BestRank"] = len(soup)
     ranks = dict()
-    sousEnsembles = list(itertools.combinations(soupe, n))
+    sousEnsembles = list(itertools.combinations(soup, n))
     for s in sousEnsembles:
-        e = Ecological(g, s)
+        e = Ecological(g, s, length)
         e.run()
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in s : 
@@ -194,27 +192,23 @@ def subClasses(soupe, n):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
                 ranks[strat.name] = [classement]      
-    for strat in soupe : 
+    for strat in soup : 
         res.at[strat.name, "RankAvg"] = statistics.mean(ranks[strat.name])
         res.at[strat.name, "RankStd"] = statistics.stdev(ranks[strat.name])
     print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
           
 
-def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
-
-    dip =[(3,3),(0,5),(5,0),(1,1)]  
-    g = Game.Game(dip,['C','D'])
-
-    if (n > len(soupe)):
-        print ("the soup size must be smaller than n")
+def subClassesWithOneStrat(soup, n, strategy, printAll = False, length = 10):
+    if (n > len(soup)):
+        print ("The soup size must be smaller than n")
         return     
-    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["BestRank", "WorstRank", "RankAvg", "RankStd"])   
-    sousEnsembles = list(itertools.combinations(soupe, n))
+    res = pd.DataFrame(np.nan,[s.name for s in soup+[strategy]], ["BestRank", "WorstRank", "RankAvg", "RankStd"])   
+    sousEnsembles = list(itertools.combinations(soup, n))
     ranks = dict()
     bestComp = []
     worstComp = []
     for s in sousEnsembles:  
-        e = Ecological(g, list(s) + [strategy])
+        e = Ecological(g, list(s) + [strategy], length)
         e.run()
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in  list(s) + [strategy] : 
@@ -231,7 +225,7 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
                 ranks[strat.name] = [classement]
-    for s in soupe+[strategy]:
+    for s in soup+[strategy]:
         if (s.name in ranks.keys()):
             res.at[s.name, "RankAvg"] = statistics.mean(ranks[s.name])
             if (len(ranks[s.name]) > 1):
@@ -239,31 +233,33 @@ def subClassesWithOneStrat(soupe, n, strategy, printAll = False):
     if (printAll) :       
         print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
     else : 
-        print("Strategy ranking : "+strategy.name)
+        print("Strategy ranking  : "+strategy.name)
         print(res.loc[strategy.name,:])
     return bestComp, worstComp, strategy
 
 
 
-def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
-    dip =[(3,3),(0,5),(5,0),(1,1)]   
-    g = Game.Game(dip,['C','D'])
-    if (n > len(soupe)):
+def subClassesRandomWithOneStrat(p, soup, n, strategy, printAll = False, length = 10 ):
+    if (n > len(soup)):
         "the soup size must be smaller than n"
         return  
-    res = pd.DataFrame(np.nan,[s.name for s in soupe+[strategy]], ["BestRank","WorstRank", "RankAvg", "RankStd"])
+    res = pd.DataFrame(np.nan,[s.name for s in soup+[strategy]], ["BestRank","WorstRank", "RankAvg", "RankStd"])
     ranks = dict()
     bestComp = []
     worstComp = []
     for i in range (0, p) : 
+        #print("Competition "+str(i+1)+ "/"+str(p))
         strategies = []
         strategies.append(strategy)
-        indice = [i for i in range (0, len(soupe))]
+        indice = [i for i in range (0, len(soup))]
         for i in range (0, n):
             indiceStrat = random.choice(indice)
             indice.remove(indiceStrat)
-            strategies.append(soupe[indiceStrat])
-        e = Ecological(g, strategies)
+            strategies.append(soup[indiceStrat])
+        #print("Les stratégies qui jouent sont : ")
+        #for s in strategies :
+            #print(s.name)
+        e = Ecological(g, strategies, length)
         e.run()
         classements = e.historic.iloc[e.generation].rank(0, method="min", ascending=False)
         for strat in strategies : 
@@ -280,7 +276,7 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
                 ranks[strat.name].append(classement)
             if (strat.name not in ranks.keys()):
                 ranks[strat.name] = [classement]
-    for s in soupe+[strategy]:
+    for s in soup+[strategy]:
         if (s.name in ranks.keys()):
             res.at[s.name, "RankAvg"] = statistics.mean(ranks[s.name])
             if (len(ranks[s.name]) > 1):
@@ -288,9 +284,10 @@ def subClassesRandomWithOneStrat(p, soupe, n, strategy, printAll = False ):
     if (printAll) :   
         print(res.sort_values(by = ['RankAvg', 'BestRank', 'RankStd', 'WorstRank'],  ascending = [True, True, True, True ]))
     else : 
-        print("Strategy ranking : "+strategy.name)
+        print("Strategy ranking  : "+strategy.name)
         print(res.loc[strategy.name,:])
     return bestComp, worstComp, strategy
+
 
 def getAllMemory(x,y):
     if (x+y > 4):
