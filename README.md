@@ -22,7 +22,8 @@ We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterate
 
 ## Machine learning for the IPD
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_machinelearning_fr.ipynb)
-In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies, mainly genetic algorithms
+
+In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies, mainly genetic algorithms.
 
 ## Bibliography
 - Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, 2019
