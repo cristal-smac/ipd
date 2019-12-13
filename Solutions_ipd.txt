@@ -1,0 +1,176 @@
+EXERCISE 1
+
+# Compute an ecological competition with All_C, All_D, Periodic("CDD") and Periodic("CCD")
+
+All_C = Periodic("C","All_C")
+All_D = Periodic("D","All_D")
+eco = Ecological(g, [All_C, All_D, Periodic('CDD'), Periodic("CCD")])
+eco.run()
+print("Evolution of the population")
+eco.drawPlot()
+print("History of the population")
+print(eco.historic)
+print("Evolution of cooperations")
+eco.drawCooperations()
+
+------------------------------------------------
+
+EXERCISE 2
+
+# Compute an ecological competition with 5 strategies : All_C, All_D, Tft et Periodic("CCD")
+
+# IN THIS EXPERIENCE, All_D WINS THE TOURNAMENT, BUT IT IS TFT THAT WINS THE ECOLOGICAL COMPETITION!
+# Note the evolution of cooperation : it reaches 100%
+
+eco = Ecological(g, [Periodic('C',"All_C"),Periodic('D',"All_D"),Periodic('CCD'),Tft()])
+eco.run()
+plt.figure(figsize=(10,8))    # pour définir la taille de la figure
+eco.drawPlot()
+eco.drawCooperations()
+
+
+
+
+----------------------------------
+
+EXERCISE 3
+
+# Encode SoftMajority which plays what its opponent played in majority. In the event of a tie, it shall play Cooperate
+
+class SoftMajority(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "softmajo"
+        self.nbCooperations = 0
+        self.nbTrahisons = 0
+        
+    def getAction(self,tick):
+        if (self.nbCooperations >= self.nbTrahisons):
+            return 'C'
+        else :
+            return 'D'
+
+    def clone(self):
+        return SoftMajority()
+
+    def update(self,my,his):
+        if (his == 'C'):
+            self.nbCooperations += 1
+        elif (his == 'D'):
+            self.nbTrahisons += 1
+            
+# Encode HardMajority which plays what its opponent played in majority. In the event of a tie, it shall Defect
+            
+class HardMajority(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "hardmajo"
+        self.nbCooperations = 0
+        self.nbTrahisons = 0
+        
+    def getAction(self,tick):
+        if (self.nbCooperations > self.nbTrahisons):
+            return 'C'
+        else :
+            return 'D'
+
+    def clone(self):
+        return HardMajority()
+
+    def update(self,my,his):
+        if (his == 'C'):
+            self.nbCooperations += 1
+        elif (his == 'D'):
+            self.nbTrahisons += 1
+            
+# Encode Gradual. Gradual cooperates on the first move, then if the opponent has just betrayed her 
+# for the nth time, enters a period of retaliation (successive Defect) of n rounds followed by 2 
+# cooperation moves 
+
+class Gradual(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "gradual"
+        self.nbTrahisons = 0
+        self.punish = 0
+        self.calm = 0
+    def getAction(self,tick):
+        if (tick==0) : return 'C'
+        if self.punish > 0 :
+            self.punish-=1
+            return 'D'
+        if self.calm > 0 :
+            self.calm-=1
+            return 'C'
+        if self.hisLast=='D' : 
+            self.punish=self.nbTrahisons - 1
+            self.calm=2
+            return 'D'
+        else: return 'C'
+
+    def clone(self):
+        return Gradual()
+
+    def update(self,my,his):
+        self.hisLast=his
+        if (his == 'D'):
+            self.nbTrahisons += 1
+  
+print("All is ok")
+
+
+----------------------------------
+
+Exercice 4
+
+# Small equivalence test: Make two tournaments with All_C, All_D, Tft, Spiteful, 
+# Periodic('CD') and Periodic('DC').
+# The first one using Periodics, Tft() and Spiteful() classes
+# The second one using only Mem(x,y,"",name) to code them.
+# Check the equivalence by printing the tournament matrix
+
+bag1 = [Periodic('C'),Periodic('D'),Tft(),Spiteful(),Periodic('CD'),Periodic('DC')]
+t1=Tournament(g,bag1,100)
+t1.run()
+print(t1.matrix)
+print()
+
+bag2 = [Mem(0,0,'C','allc'),Mem(0,0,'D','alld'),Mem(0,1,'cCD','tft'),
+        Mem(1,1,'cCDDD','spiteful'),Mem(1,0,'cDC','percd'),Mem(1,0,'dDC','perdc')]
+t2=Tournament(g,bag2,100)
+t2.run()
+print(t2.matrix)
+
+----------------------------------
+
+Exercice 5
+
+# What is the common name of the strategy that wins the Mem(1,1) ?
+
+
+
+----------------------------------
+
+Exercice 6
+
+# Study the phenomena of invasion
+# In particular, measure empirically (by few tests) the number of ALL_D required 
+# to invade a family of 100 ALL_C in an ecological competition.
+
+
+
+----------------------------------
+
+Exercice 7
+
+# Master-Slave Strategies
+# It is said that there is a set of Master-Slave strategies if a Master strategy tries to recognize 
+# his Slaves on a starter, to better exploit them afterwards.
+# Develop a Master strategy that plays TFT unless the opponent has played consecutively 1 time C, 
+# 50 times D, 1 time C in which case she always plays D
+# Develop a Slave strategy that plays 1 time C, 50 times D, then always C
+# Each additional slave brings an advantage to Master!
+# Add these strategies to the mem(1,1) competition by putting enough Escaves for the Master to 
+# win this competition
+
+
