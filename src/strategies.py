@@ -328,18 +328,16 @@ class MetaStrategy(Strategy):
         self.n = n
         self.scores = [0 for i in range(len(bag))]
         self.cpt = -1
+        self.nbPlayed = [0 for i in range(len(bag))]
         
     def getAction(self,tick):
-        print(tick)
-        
         if (tick < self.n * len(self.bag)):
             if (tick % self.n ==  0):
-                self.cpt = (self.cpt + 1) % len(self.bag) 
-            return self.bag[self.cpt].getAction(tick % self.n)
+                self.cpt = (self.cpt + 1) % len(self.bag)
         else :
             if (tick % self.n ==  0):
                 self.cpt = np.argmax(self.scores)
-            return self.bag[self.cpt].getAction(tick % self.n)
+        return self.bag[self.cpt].getAction(tick % self.n + self.nbPlayed[self.cpt])
                 
     def clone(self):
         return MetaStrategy(self.bag, self.n)
@@ -352,6 +350,7 @@ class MetaStrategy(Strategy):
         elif (his == 'D' and my == 'C'):
             self.scores[self.cpt] = self.scores[self.cpt] + 5
         self.bag[self.cpt].update(my,his)
+        self.nbPlayed[self.cpt] += 1
 
 
 
