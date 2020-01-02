@@ -27,8 +27,8 @@ class Meeting :
     def reinit(self):
         self.s1_score=0
         self.s2_score=0
-        self.s1_rounds=""
-        self.s2_rounds=""
+        self.s1_rounds=[]
+        self.s2_rounds=[]
 
     def run(self):
         self.reinit()
@@ -39,8 +39,8 @@ class Meeting :
                 self.nb_cooperation_s1 +=1
             if (c2 == "C"):
                 self.nb_cooperation_s2 +=1
-            self.s1_rounds+=c1
-            self.s2_rounds+=c2
+            self.s1_rounds.append(c1)
+            self.s2_rounds.append(c2)
             self.s1.update(c1,c2)
             self.s2.update(c2,c1)
             act=self.game.actions
