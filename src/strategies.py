@@ -1,27 +1,27 @@
 import itertools
-import random
 import numpy as np
+import collections
 
 class Strategy():
     def setMemory(self,mem):
         pass
-    
+
     def getAction(self,tick):
         pass
-    
+
     def __copy__(self):
         pass
 
     def update(self,x,y):
         pass
-    
+
 
 class Periodic(Strategy):
     def __init__(self, sequence, name=None):
         super().__init__()
         self.sequence = sequence.upper()
         self.step = 0
-        self.name = "per_"+sequence if (name == None) else name
+        self.name = "per_"+sequence if (name is None) else name
 
     def getAction(self,tick):
         return self.sequence[tick % len(self.sequence)]
@@ -38,7 +38,7 @@ class Tft(Strategy):
         super().__init__()
         self.name = "tft"
         self.hisPast=""
-        
+
     def getAction(self,tick):
         return 'C' if (tick==0) else self.hisPast[-1]
 
@@ -53,7 +53,7 @@ class Tf2t(Strategy):
         super().__init__()
         self.name = "tf2t"
         self.hisPast=""
-        
+
     def getAction(self,tick):
         if (tick==0 or tick==1):
             return 'C'
@@ -74,7 +74,7 @@ class Hardtft(Strategy):
         super().__init__()
         self.name = "hardtft"
         self.hisPast=""
-        
+
     def getAction(self,tick):
         if (tick==0 or tick==1):
             return 'C'
@@ -96,7 +96,7 @@ class Slowtft(Strategy):
         self.name = "slowtft"
         self.hisPast=""
         self.myPast=""
-        
+
     def getAction(self,tick):
         if (tick==0 or tick==1):
             return 'C'
@@ -107,7 +107,7 @@ class Slowtft(Strategy):
                 return 'C'
             else :
                 return self.myPast[-1]
-            
+
 
     def clone(self):
         return Slowtft()
@@ -115,15 +115,15 @@ class Slowtft(Strategy):
     def update(self,my,his):
         self.hisPast+=his
         self.myPast+=my
-    
-    
+
+
 class Spiteful(Strategy):
     def __init__(self):
         super().__init__()
         self.name = "spiteful"
         self.hisPast=""
         self.myPast=""
-        
+
     def getAction(self,tick):
         if (tick==0):
                 return 'C'
@@ -145,7 +145,7 @@ class Mistrust(Strategy):
         self.name = "mistrust"
         self.hisPast=""
         self.myPast=""
-        
+
     def getAction(self,tick):
         if (tick==0):
                 return 'D'
@@ -167,7 +167,7 @@ class SoftMajority(Strategy):
         self.name = "softmajo"
         self.nbCooperations = 0
         self.nbTrahisons = 0
-        
+
     def getAction(self,tick):
         if (self.nbCooperations >= self.nbTrahisons):
             return 'C'
@@ -189,7 +189,7 @@ class HardMajority(Strategy):
         self.name = "hardmajo"
         self.nbCooperations = 0
         self.nbTrahisons = 0
-        
+
     def getAction(self,tick):
         if (self.nbCooperations > self.nbTrahisons):
             return 'C'
@@ -204,7 +204,7 @@ class HardMajority(Strategy):
             self.nbCooperations += 1
         elif (his == 'D'):
             self.nbTrahisons += 1
-            
+
 
 class Gradual(Strategy):
     def __init__(self):
@@ -221,7 +221,7 @@ class Gradual(Strategy):
         if self.calm > 0 :
             self.calm-=1
             return 'C'
-        if self.hisLast=='D' : 
+        if self.hisLast=='D' :
             self.punish=self.nbTrahisons - 1
             self.calm=2
             return 'D'
@@ -241,10 +241,10 @@ class Mem(Strategy):
         self.x = x
         self.y = y
         self.genome = genome
-        if (name == None): #Nom par défaut si l'utilisateur ne le définit pas
+        if (name is None): #Nom par défaut si l'utilisateur ne le définit pas
             self.name = genome
-        self.myMoves = [] #contains my x last moves
-        self.itsMoves = [] #contains its y last moves
+        self.myMoves = collections.deque(maxlen=x)  # contains my x last moves
+        self.itsMoves = collections.deque(maxlen=y)  # contains its y last moves
 
     def clone(self):
         return Mem(self.x, self.y, self.genome, self.name)
@@ -265,21 +265,15 @@ class Mem(Strategy):
         return self.genome[cpt]
 
     def update(self, myMove, itsMove):
-        if (self.x > 0):
-            if(len(self.myMoves) == self.x):
-                del self.myMoves[0]
-            self.myMoves.append(myMove)
-        if (self.y > 0):
-            if(len(self.itsMoves) == self.y):
-                del self.itsMoves[0]
-            self.itsMoves.append(itsMove)
+        self.myMoves.append(myMove)
+        self.itsMoves.append(itsMove)
 
 class Prober(Strategy):
     def __init__(self):
         super().__init__()
         self.name = "prober"
         self.hisPast=""
-        
+
     def getAction(self,tick):
         if (tick==0):
             return 'D'
@@ -290,7 +284,7 @@ class Prober(Strategy):
                 return 'D'
             else :
                 return self.hisPast[-1]
-                
+
     def clone(self):
         return Prober()
 
@@ -303,7 +297,7 @@ class Pavlov(Strategy):
         self.name = "pavlov"
         self.hisPast=""
         self.myPast=""
-        
+
     def getAction(self,tick):
         if (tick==0):
             return 'C'
@@ -311,8 +305,8 @@ class Pavlov(Strategy):
             if (self.hisPast[-1] == self.myPast[-1]):
                 return 'C'
             else :
-                return 'D'          
-                
+                return 'D'
+
     def clone(self):
         return Pavlov()
 
@@ -329,7 +323,7 @@ class MetaStrategy(Strategy):
         self.scores = [0 for i in range(len(bag))]
         self.cpt = -1
         self.nbPlayed = [0 for i in range(len(bag))]
-        
+
     def getAction(self,tick):
         if (tick < self.n * len(self.bag)):
             if (tick % self.n ==  0):
@@ -338,7 +332,7 @@ class MetaStrategy(Strategy):
             if (tick % self.n ==  0):
                 self.cpt = np.argmax(self.scores)
         return self.bag[self.cpt].getAction(tick % self.n + self.nbPlayed[self.cpt])
-                
+
     def clone(self):
         return MetaStrategy(self.bag, self.n)
 
