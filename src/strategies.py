@@ -326,40 +326,7 @@ class Pavlov(Strategy):
     def update(self, my, his):
         self.hisPast += his
         self.myPast += my
-
-
-class MetaStrategy(Strategy):
-    def __init__(self, bag, n):
-        super().__init__()
-        self.name = "metastrat"
-        self.bag = bag
-        self.n = n
-        self.scores = [0 for i in range(len(bag))]
-        self.cpt = -1
-        self.nbPlayed = [0 for i in range(len(bag))]
-
-    def getAction(self, tick):
-        if tick < self.n * len(self.bag):
-            if tick % self.n == 0:
-                self.cpt = (self.cpt + 1) % len(self.bag)
-        else:
-            if tick % self.n == 0:
-                self.cpt = np.argmax(self.scores)
-        return self.bag[self.cpt].getAction(tick % self.n + self.nbPlayed[self.cpt])
-
-    def clone(self):
-        return MetaStrategy(self.bag, self.n)
-
-    def update(self, my, his):
-        if his == "C" and my == "C":
-            self.scores[self.cpt] = self.scores[self.cpt] + 3
-        elif his == "D" and my == "D":
-            self.scores[self.cpt] = self.scores[self.cpt] + 1
-        elif his == "D" and my == "C":
-            self.scores[self.cpt] = self.scores[self.cpt] + 5
-        self.bag[self.cpt].update(my, his)
-        self.nbPlayed[self.cpt] += 1
-
+        
 
 def getMem(x, y):
     if x + y > 4:
@@ -398,3 +365,36 @@ def getClassicals():
         Gradual(),
         Prober(),
     ]
+
+
+class MetaStrategy(Strategy):
+    def __init__(self, bag, n):
+        super().__init__()
+        self.name = "metastrat"
+        self.bag = bag
+        self.n = n
+        self.scores = [0 for i in range(len(bag))]
+        self.cpt = -1
+        self.nbPlayed = [0 for i in range(len(bag))]
+
+    def getAction(self, tick):
+        if tick < self.n * len(self.bag):
+            if tick % self.n == 0:
+                self.cpt = (self.cpt + 1) % len(self.bag)
+        else:
+            if tick % self.n == 0:
+                self.cpt = np.argmax(self.scores)
+        return self.bag[self.cpt].getAction(tick % self.n + self.nbPlayed[self.cpt])
+
+    def clone(self):
+        return MetaStrategy(self.bag, self.n)
+
+    def update(self, my, his):
+        if his == "C" and my == "C":
+            self.scores[self.cpt] = self.scores[self.cpt] + 3
+        elif his == "D" and my == "D":
+            self.scores[self.cpt] = self.scores[self.cpt] + 1
+        elif his == "D" and my == "C":
+            self.scores[self.cpt] = self.scores[self.cpt] + 5
+        self.bag[self.cpt].update(my, his)
+        self.nbPlayed[self.cpt] += 1
