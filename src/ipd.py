@@ -225,3 +225,8 @@ def getAllMemory(x, y):
     permut = [p for p in itertools.product(["C", "D"], repeat=len_genome)]
     genomes = ["".join(p) for p in permut]
     return [Mem(x, y, gen) for gen in genomes]
+
+
+
+
+
