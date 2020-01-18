@@ -384,7 +384,9 @@ class MetaStrategy(Strategy):
         else:
             if tick % self.n == 0:
                 self.cpt = np.argmax(self.scores)
-        return self.bag[self.cpt].getAction(tick % self.n + self.nbPlayed[self.cpt])
+        #print("Playing : "+self.bag[self.cpt].name)
+        #print(self.nbPlayed[self.cpt])
+        return self.bag[self.cpt].getAction(self.nbPlayed[self.cpt])
 
     def clone(self):
         return MetaStrategy(self.bag, self.n)
