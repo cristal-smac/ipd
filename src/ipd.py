@@ -14,8 +14,12 @@ from strategies import Mem
 dip = [(3, 3), (0, 5), (5, 0), (1, 1)]
 g = game.Game(dip, ["C", "D"])
 
+class Evaluator:
+    def run(self):
+        pass
 
-class Meeting:
+
+class Meeting(Evaluator):
     def __init__(self, game, s1, s2, length=1000):
         self.game = game
         self.s1 = s1.clone()
@@ -48,7 +52,7 @@ class Meeting:
             self.s2_score += self.game.scores["y"][act.index(c1), act.index(c2)]
 
 
-class Tournament:
+class Tournament(Evaluator):
     def __init__(self, game, strategies, length=1000, repeat=1):
         self.strategies = strategies
         self.game = game
@@ -98,7 +102,7 @@ class Tournament:
         self.cooperations = self.cooperations.reindex(columns=rows)
 
 
-class Ecological:
+class Ecological(Evaluator):
     def __init__(self, game, strategies, length=1000, repeat=1, pop=100):
         self.strategies = strategies
         self.pop = pop
