@@ -261,6 +261,8 @@ class Mem(Strategy):
         return Mem(self.x, self.y, self.genome, self.name)
 
     def getAction(self, tick):
+        if (tick == 0 and len(self.myMoves)>0) :
+            print("Strategy not reinitialized", flush=True)
         if tick < max(self.x, self.y):
             return self.genome[tick]
         cpt = 0
