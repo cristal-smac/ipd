@@ -1,14 +1,14 @@
 # IPD : the Iterated Prisoner's Dilemma
 
-This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments with the iterated dilimation of the prisoner. This repository has now been deleted to reappear here.
+This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma. This repository has now been deleted to reappear here.
 
-It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and many tools for sophisticated experiments.
+It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and gives many tools for sophisticated experiments.
 
 Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
 
 Contact : philippe.mathieu at univ-lille.fr
 
-In this repository there are 3 jupyter notebooks in Python which contain both explanations and exercises on this field. Their objective is primarily pedagogical.
+In this repository there are several jupyter notebooks in Python which contain both explanations and exercises on this field. Their objective is primarily pedagogical.
 
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
