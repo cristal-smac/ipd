@@ -27,7 +27,7 @@ Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.or
 
 The tournament is a first way to evaluate a set of strategies. The ecological competition is more robust. But testing a strategy in various sets is even more robust. We propose here some tools to calculate the average performance of a strategy in all possible subclasses of a list of reference strategies.
 
-# How to simplify complete large classes?
+## How to simplify complete large classes?
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_simplify.ipynb)
 
 Creating a large set of strategies is difficult. The computation of complete classes of strategies, as seen in the basics, thanks to a definition based on a genotype, easily allows to generate thousands of them. Nevertheless some of them are redundant. This sheet provides a reflection on how to test the equivalence of two strategies and how to simplify large sets. 
@@ -45,7 +45,7 @@ Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.or
 Meta-strategies are strategies that build on a set of other strategies. They play a given strategy for a certain period of time and then, according to certain criteria, other strategies for another period of time. This makes it possible to construct scomplex and yet understandable behaviors, while maintaining a very high level of adaptability of the strategy to its opponent.
 
 
-## Bibliography
+# Bibliography
 - Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, 2019
 - Philippe Mathieu, Jean-Paul Delahaye. **New Winning Strategies for the Iterated Prisoner's Dilemma**. Journal of Artificial Societies and Social Simulation, SimSoc Consortium, 2017, 20 (4)
 - Philippe Mathieu, Jean-Paul Delahaye. **New Winning Strategies for the Iterated Prisoner's Dilemma**. 14th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2015), May 2015, Istanbul, Turkey. pp.1665-1666
