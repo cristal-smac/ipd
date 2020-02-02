@@ -1,6 +1,8 @@
 # IPD : the Iterated Prisoner's Dilemma
 
-Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD)
+This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments with the iterated dilimation of the prisoner. This repository has now been deleted to reappear here.
+
+It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and many tools for sophisticated experiments.
 
 Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
 
@@ -14,16 +16,34 @@ English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/
 
 In this Jupyter notebook we explain the basics of game theory concerning simultaneous games, including payoff matrix notion and the different equilibrium notions. In this notebook the prisoner's dilemma is just one example among many.
 
-## The Iterated Prisoner's dilemma
+## The basics of the Iterated Prisoner's dilemma
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_basics.ipynb)
 English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=EN/ipd_basics.ipynb)
 
-We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. Strategies can now learn from the past. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided.
+We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. Strategies can now learn from the past. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided. The two classic methods of evaluating a set of strategies are provided: the tournament and the ecological competition.
 
-## Machine learning for the IPD
+## A more robust evaluation tool: subclasses
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_subclasses.ipynb)
+
+The tournament is a first way to evaluate a set of strategies. The ecological competition is more robust. But testing a strategy in various sets is even more robust. We propose here some tools to calculate the average performance of a strategy in all possible subclasses of a list of reference strategies.
+
+# How to simplify complete large classes?
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_simplify.ipynb)
+
+Creating a large set of strategies is difficult. The computation of complete classes of strategies, as seen in the basics, thanks to a definition based on a genotype, easily allows to generate thousands of them. Nevertheless some of them are redundant. This sheet provides a reflection on how to test the equivalence of two strategies and how to simplify large sets. 
+
+
+## An approach using genetic algorithms
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_gas.ipynb)
 
-In this Jupyter Notebook we show how to use "machine learning" technics to identify and produce new efficient strategies, mainly genetic algorithms.
+In this Jupyter Notebook we show how to use "genetic" technics to identify and produce new efficient strategies, mainly genetic algorithms. It is then very easy, thanks to this approach, to find the best possible strategy for a fixed set of strategies.
+
+
+## The construction of meta-strategies
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_metastrat.ipynb)
+
+Meta-strategies are strategies that build on a set of other strategies. They play a given strategy for a certain period of time and then, according to certain criteria, other strategies for another period of time. This makes it possible to construct scomplex and yet understandable behaviors, while maintaining a very high level of adaptability of the strategy to its opponent.
+
 
 ## Bibliography
 - Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, 2019
