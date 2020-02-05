@@ -257,8 +257,11 @@ class Mem(Strategy):
         self.myMoves = collections.deque(maxlen=x)  # contains my x last moves
         self.itsMoves = collections.deque(maxlen=y)  # contains its y last moves
 
-    def clone(self):
-        return Mem(self.x, self.y, self.genome, self.name)
+    def clone(self, name=None):
+        if name is None:
+            return Mem(self.x, self.y, self.genome, self.name)
+        else :
+            return Mem(self.x, self.y, self.genome, name)
 
     def getAction(self, tick):
         if (tick == 0 and len(self.myMoves)>0) :
