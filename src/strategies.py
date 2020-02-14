@@ -270,28 +270,21 @@ class Mem(Strategy):
         if tick < max(self.x, self.y):
             return self.genome[tick]
         cpt = 0
-        #for i in range(self.x - 1, -1, -1):
         for i in range(0, self.x):
             cpt *= 2
             if self.myMoves[i] == "D":
                 cpt += 1
-        #for i in range(self.y - 1, -1, -1):
         for i in range(0, self.y):
             cpt *= 2
             if self.itsMoves[i] == "D":
                 cpt += 1
         cpt += max(self.x, self.y)
-##        if (self.genome == "CDDCDDDDCD"):
-##            print(cpt)
         return self.genome[cpt]
 
     def update(self, myMove, itsMove):
         self.myMoves.append(myMove)
         self.itsMoves.append(itsMove)
-##        if (self.genome == "CDDCDDDDCD"):
-##            print(self.myMoves)
-##            print(self.itsMoves)
-##            print('----------')
+
 
 class Prober(Strategy):
     def __init__(self):
