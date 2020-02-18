@@ -198,7 +198,7 @@ class Ecological(Evaluator):
         date = datetime.datetime.now()
         self.historic.to_csv(str(date) + ".csv", sep=";", encoding="utf-8")
 
-    def drawPlot(self, nbCourbes=None, nbLegends=None):
+    def drawPlot(self, nbCourbes=None, nbLegends=None, save=''):
         nbCourbes = len(self.strategies) if (nbCourbes == None) else nbCourbes
         nbLegends = len(self.strategies) if (nbLegends == None) else nbLegends
         strat = self.historic.columns.tolist()
@@ -208,19 +208,25 @@ class Ecological(Evaluator):
                 label=strat[i] if (i < nbLegends) else "_nolegend_",
             )
         plt.legend(bbox_to_anchor=(0, 1), loc=2, borderaxespad=0.0)
-        plt.ylabel("Population")
-        plt.xlabel("Generation")
-        plt.show()
+        plt.ylabel("Populations")
+        plt.xlabel("Generations")
+        if save == '' :
+            plt.show()
         # date = datetime.datetime.now()
         # plt.savefig(str(date)+'.png', dpi=1000)
+        else : plt.savefig(save, dpi=1000)
+        plt.close()
+        
 
-    def drawCooperations(self):
+    def drawCooperation(self, save=''):
         plt.plot(self.listeCooperations)
-        plt.ylabel("Pourcentage de cooperations")
-        plt.xlabel("Generation")
+        plt.ylabel("% of cooperation")
+        plt.xlabel("Generations")
         plt.ylim(0, 101)
-        plt.show()
-
+        if save == '' : plt.show()
+        else : plt.savefig(save,dpi=1000)
+        plt.close()
+        
 
 def getAllMemory(x, y):
     if x + y > 4:
