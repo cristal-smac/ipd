@@ -22,16 +22,15 @@ English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/
 
 We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterated version of the previous one. Strategies can now learn from the past. We show how to build a strategy and especially how to evaluate it. Several sets of objective strategies are provided. The two classic methods of evaluating a set of strategies are provided: the tournament and the ecological competition.
 
-## A more robust evaluation tool: subclasses
-Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_subclasses_fr.ipynb)
-
-The tournament is a first way to evaluate a set of strategies. The ecological competition is more robust. But testing a strategy in various sets is even more robust. We propose here some tools to calculate the average performance of a strategy in all possible subclasses of a list of reference strategies.
-
 ## How to simplify complete large classes?
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_simplify_fr.ipynb)
 
 Creating a large set of strategies is difficult. The computation of complete classes of strategies, as seen in the basics, thanks to a definition based on a genotype, easily allows to generate thousands of them. Nevertheless some of them are redundant. This sheet provides a reflection on how to test the equivalence of two strategies and how to simplify large sets. 
 
+## A more robust evaluation tool: subclasses
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_subclasses_fr.ipynb)
+
+The tournament is a first way to evaluate a set of strategies. The ecological competition is more robust. But testing a strategy in various sets is even more robust. We propose here some tools to calculate the average performance of a strategy in all possible subclasses of a list of reference strategies.
 
 ## An approach using genetic algorithms
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_gas_fr.ipynb)
