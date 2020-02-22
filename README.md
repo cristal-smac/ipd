@@ -24,6 +24,8 @@ We focus now on the famous Iterated Prisoner's Dilemma Game which is the iterate
 
 ## How to simplify complete large classes?
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/ipd_tools_simplify_fr.ipynb)
+English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=EN/ipd_tools_simplify_en.ipynb)
+
 
 Creating a large set of strategies is difficult. The computation of complete classes of strategies, as seen in the basics, thanks to a definition based on a genotype, easily allows to generate thousands of them. Nevertheless some of them are redundant. This sheet provides a reflection on how to test the equivalence of two strategies and how to simplify large sets. 
 
