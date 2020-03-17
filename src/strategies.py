@@ -149,21 +149,16 @@ class Mistrust(Strategy):
         super().__init__()
         self.name = "mistrust"
         self.hisPast = ""
-        self.myPast = ""
 
     def getAction(self, tick):
         if tick == 0:
             return "D"
-        if self.hisPast[-1] == "D" or self.myPast[-1] == "D":
-            return "D"
-        else:
-            return "C"
+        return self.hisPast[-1]
 
     def clone(self):
         return Mistrust()
 
     def update(self, my, his):
-        self.myPast += my
         self.hisPast += his
 
 
