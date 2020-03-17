@@ -52,8 +52,8 @@ class Meeting(Evaluator):
             self.s2_score += self.game.scores["y"][act.index(c1), act.index(c2)]
 
     def prettyPrint(self,max=20) :
-        print(m.s1.name + "\t" + ' '.join(map(str, m.s1_rounds[0 : max])) + " " + str(m.s1_score))
-        print(m.s2.name + "\t" + ' '.join(map(str, m.s2_rounds[0 : max])) + " " + str(m.s2_score))
+        print(self.s1.name + "\t" + ' '.join(map(str, self.s1_rounds[0 : max])) + " " + str(self.s1_score))
+        print(self.s2.name + "\t" + ' '.join(map(str, self.s2_rounds[0 : max])) + " " + str(self.s2_score))
 
 
 
