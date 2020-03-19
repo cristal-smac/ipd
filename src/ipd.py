@@ -87,16 +87,19 @@ class Tournament(Evaluator):
                     meet.run()
                     self.matrix.at[
                         self.strategies[i].name, self.strategies[j].name
-                    ] = meet.s1_score
-                    self.matrix.at[
-                        self.strategies[j].name, self.strategies[i].name
-                    ] = meet.s2_score
+                    ] += meet.s1_score
+                    if(i==j): print("Eh merde!")
+                    if (i != j):
+                        self.matrix.at[
+                            self.strategies[j].name, self.strategies[i].name
+                        ] += meet.s2_score
                     self.cooperations.at[
                         self.strategies[i].name, self.strategies[j].name
-                    ] = meet.nb_cooperation_s1
-                    self.cooperations.at[
-                        self.strategies[j].name, self.strategies[i].name
-                    ] = meet.nb_cooperation_s2
+                    ] += meet.nb_cooperation_s1
+                    if (i != j):
+                        self.cooperations.at[
+                            self.strategies[j].name, self.strategies[i].name
+                        ] += meet.nb_cooperation_s2
         self.matrix["Total"] = self.matrix.sum(axis=1)
         self.matrix.sort_values(by="Total", ascending=False, inplace=True)
         rows = list(self.matrix.index) + ["Total"]
