@@ -209,36 +209,38 @@ class HardMajority(Strategy):
 
 
 class Gradual(Strategy):
-    def __init__(self):
+    def __init__(self, hard=True):
         super().__init__()
-        self.name = "gradual"
+        self.name = "gradual_"+("hard" if hard else "soft")
         self.nbTrahisons = 0
         self.punish = 0
         self.calm = 0
+        self.hisLast=""
+        self.hard=hard
 
     def getAction(self, tick):
         if tick == 0:
             return "C"
         if self.punish > 0:
             self.punish -= 1
+            if (self.hard and self.hisLast == "D") : self.nbTrahisons+=1
             return "D"
         if self.calm > 0:
             self.calm -= 1
+            if (self.hard and self.hisLast == "D") : self.nbTrahisons+=1
             return "C"
+        if self.hisLast == "D" : self.nbTrahisons+=1
         if self.hisLast == "D":
             self.punish = self.nbTrahisons - 1
             self.calm = 2
             return "D"
-        else:
-            return "C"
+        return "C"
 
     def clone(self):
-        return Gradual()
+        return Gradual(self.hard)
 
     def update(self, my, his):
         self.hisLast = his
-        if his == "D":
-            self.nbTrahisons += 1
 
 
 class Mem(Strategy):
@@ -327,7 +329,25 @@ class Pavlov(Strategy):
     def update(self, my, his):
         self.hisPast += his
         self.myPast += my
-        
+
+
+#random.seed(0)
+#np.random.seed(0)
+class Lunatic(Strategy):
+    def __init__(self, proba=0.5):
+        super().__init__()
+        self.name = "lunatic"
+        self.proba = proba
+
+    def getAction(self, tick):
+        return np.random.choice(["C","D"],p=[self.proba, 1-self.proba])
+
+    def clone(self):
+        return Lunatic(self.proba)
+
+#    def update(self, my, his):
+#        return
+
 
 def getMem(x, y):
     if x + y > 4:
