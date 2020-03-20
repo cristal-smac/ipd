@@ -88,7 +88,6 @@ class Tournament(Evaluator):
                     self.matrix.at[
                         self.strategies[i].name, self.strategies[j].name
                     ] += meet.s1_score
-                    if(i==j): print("Eh merde!")
                     if (i != j):
                         self.matrix.at[
                             self.strategies[j].name, self.strategies[i].name
