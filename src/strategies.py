@@ -330,6 +330,54 @@ class Pavlov(Strategy):
         self.hisPast += his
         self.myPast += my
 
+        
+class SpitefulCC(Strategy):   # CC then plays like Spiteful()    equiv to Mem(1,2,'ccCDDDDDDD')
+    def __init__(self):
+        super().__init__()
+        self.name = "spitefulCC"
+        self.hisPast = ""
+        self.myPast = ""
+
+    def getAction(self, tick):
+        if tick < 2:
+            return "C"
+        if self.hisPast[-1] == "D" or self.myPast[-1] == "D":
+            return "D"
+        else:
+            return "C"
+
+    def clone(self):
+        return SpitefulCC()
+
+    def update(self, my, his):
+        self.myPast += my
+        self.hisPast += his
+
+        
+class TftSpiteful(Strategy):
+    def __init__(self):
+        super().__init__()
+        self.name = "TftSpiteful"
+        self.hisPast = ""
+        self.trahison=False
+        
+    def getAction(self, tick):
+        if tick < 2:
+            return "C"
+        if self.hisPast[-1] == "D" and self.hisPast[-2] == "D":
+            self.trahison =True
+        if (self.trahison):
+            return "D"
+        else:
+            return self.hisPast[-1]
+        
+    def clone(self):
+        return TftSpiteful()
+
+    def update(self, my, his):
+        self.hisPast += his
+        
+    
 
 #random.seed(0)
 #np.random.seed(0)
