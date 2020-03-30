@@ -205,7 +205,7 @@ class Ecological(Evaluator):
         date = datetime.datetime.now()
         self.historic.to_csv(str(date) + ".csv", sep=";", encoding="utf-8")
 
-    def drawPlot(self, nbCourbes=None, nbLegends=None, save=''):
+    def drawPlot(self, nbCourbes=None, nbLegends=None, file='', title=''):
         nbCourbes = len(self.strategies) if (nbCourbes == None) else nbCourbes
         nbLegends = len(self.strategies) if (nbLegends == None) else nbLegends
         strat = self.historic.columns.tolist()
@@ -217,21 +217,25 @@ class Ecological(Evaluator):
         plt.legend(bbox_to_anchor=(0, 1), loc=2, borderaxespad=0.0)
         plt.ylabel("Populations")
         plt.xlabel("Generations")
-        if save == '' :
+        if title != '' :
+            plt.title(title) 
+        if file == '' :
             plt.show()
         # date = datetime.datetime.now()
         # plt.savefig(str(date)+'.png', dpi=1000)
-        else : plt.savefig(save, dpi=1000)
+        else : plt.savefig(file, dpi=1000)
         plt.close()
         
 
-    def drawCooperation(self, save=''):
+    def drawCooperation(self, file='', title=''):
         plt.plot(self.listeCooperations)
+        if title != '' :
+            plt.title(title)
         plt.ylabel("% of cooperation")
         plt.xlabel("Generations")
         plt.ylim(0, 101)
-        if save == '' : plt.show()
-        else : plt.savefig(save,dpi=1000)
+        if file == '' : plt.show()
+        else : plt.savefig(file,dpi=1000)
         plt.close()
         
 
