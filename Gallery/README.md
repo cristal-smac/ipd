@@ -1,4 +1,8 @@
-![alt text](plot_4Classicals.png)
+| ![alt text](plot_4Classicals.png) | ![alt text](plot_4Classicals.png) |
+|:-:|:-:|
+| ![alt text](plot_4Classicals.png) | ![alt text](plot_4Classicals.png) |
+| ![alt text](plot_4Classicals.png) | ![alt text](plot_4Classicals.png) |
+
 
 | <img class="image" src="Gallery/plot_4Classicals.pdf" alt="drawing" width="100" />  | <img class="image" src="plot_4ClassicalsCooperation.pdf" alt="drawing" width="100" />   |
 |:-:|:-:|
