@@ -11,8 +11,8 @@ import datetime
 import game
 from strategies import Mem
 
-dip = [(3, 3), (0, 5), (5, 0), (1, 1)]
-g = game.Game(dip, ["C", "D"])
+scores = [(3, 3), (0, 5), (5, 0), (1, 1)]
+g = game.Game(scores, ["C", "D"])
 
 class Evaluator:
     def run(self):
