@@ -251,7 +251,7 @@ class Mem(Strategy):
         self.y = y
         self.genome = genome
         if name is None:  # Nom par défaut si l'utilisateur ne le définit pas
-            self.name = genome
+            self.name = "Mem"+str(x)+str(y)+"_"+genome
         self.myMoves = collections.deque(maxlen=x)  # contains my x last moves
         self.itsMoves = collections.deque(maxlen=y)  # contains its y last moves
 
@@ -377,7 +377,6 @@ class TftSpiteful(Strategy):
     def update(self, my, his):
         self.hisPast += his
         
-    
 
 #random.seed(0)
 #np.random.seed(0)
@@ -433,6 +432,10 @@ def getClassicals():
         Slowtft(),
         Gradual(),
         Prober(),
+        SpitefulCC(),
+        TftSpiteful(),
+        Gradual(False),
+        Mem(1,2,"ccCDCDDCDD","Winner12")
     ]
 
 
