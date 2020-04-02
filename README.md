@@ -1,6 +1,6 @@
 # IPD : the Iterated Prisoner's Dilemma
 
-This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma. This repository has now been deleted to reappear here.
+This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma. See the [WayBack Machine](https://web.archive.org/web/2000*/www.lifl.fr/ipd)). This repository has now been deleted to reappear here.
 
 It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and gives many tools for sophisticated experiments. It is also useful to reproduce most of the experiences of our research articles cited in the bibliography.
 
