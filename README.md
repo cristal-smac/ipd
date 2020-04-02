@@ -20,7 +20,7 @@ from tools import *
 bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
 e= Ecological(g,bag, 1000, pop=[100])
 e.run()
-e.drawPlot(None,None,file="plot.png")
+e.drawPlot()
 ```
 
 ## Gallery
