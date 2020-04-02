@@ -20,12 +20,11 @@ from tools import *
 bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
 e= Ecological(g,bag, 1000, pop=[100])
 e.run()
-e.drawPlot(None,None,file="plot_AllStayStable.png", title='If everyone is kind, all is stable')
+e.drawPlot(None,None,file="plot.png")
 ```
 
 ## Gallery
-A gallery of remarkable curves is available.
-[Gallery/README.md](Gallery)
+A [Gallery](Gallery) of many remarkable curves is available.
 
 # Notebooks
 
