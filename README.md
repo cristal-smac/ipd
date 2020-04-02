@@ -10,6 +10,25 @@ Contact : philippe.mathieu at univ-lille.fr
 
 In this repository there are several jupyter notebooks in Python which contain both explanations and exercises on this field. Their objective is primarily pedagogical.
 
+## Quick start
+
+```python
+from ipd import *
+from strategies import *
+from tools import *
+
+bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
+e= Ecological(g,bag, 1000, pop=[100])
+e.run()
+e.drawPlot(None,None,file="plot_AllStayStable.png", title='If everyone is kind, all is stable')
+```
+
+## Gallery
+A gallery of remarkable curves is available.
+[Gallery/README.md](Gallery)
+
+# Notebooks
+
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
 English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=EN/gametheory_en.ipynb)
