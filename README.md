@@ -20,6 +20,8 @@ from tools import *
 bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
 e= Ecological(g,bag, 1000, pop=[100])
 e.run()
+e.tournament.matrix
+e.historic
 e.drawPlot()
 ```
 
