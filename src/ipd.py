@@ -109,6 +109,20 @@ class Tournament(Evaluator):
         self.cooperations = self.cooperations.reindex(columns=rows)
 
 
+#class Ecological(Evaluator):
+#    def __init__(self, game, strategies, length=1000, repeat=1, pop=100):
+#        self.strategies = strategies
+#        self.pop = pop
+#        self.game = game
+#        self.length = length
+#        self.generation = 0  # Numéro de la génération actuelle
+#        self.base = pop * len(strategies)
+#        self.historic = pd.DataFrame(columns=[strat.name for strat in strategies])
+#        self.historic.loc[0] = [pop for x in range(len(strategies))]
+#        self.extinctions = dict((s.name, math.inf) for s in strategies)
+#        self.cooperations = dict((s.name, 0) for s in strategies)
+
+
 class Ecological(Evaluator):
     def __init__(self, game, strategies, length=1000, repeat=1, pop=100):
         self.strategies = strategies
@@ -116,9 +130,14 @@ class Ecological(Evaluator):
         self.game = game
         self.length = length
         self.generation = 0  # Numéro de la génération actuelle
-        self.base = pop * len(strategies)
         self.historic = pd.DataFrame(columns=[strat.name for strat in strategies])
-        self.historic.loc[0] = [pop for x in range(len(strategies))]
+        if type(pop) == int:
+            self.historic.loc[0] = [pop for x in range(len(strategies))]
+            self.base = pop * len(strategies)
+        else :
+            assert len(pop)==len(strategies)
+            self.historic.loc[0] = pop
+            self.base = sum(pop)
         self.extinctions = dict((s.name, math.inf) for s in strategies)
         self.cooperations = dict((s.name, 0) for s in strategies)
         self.listeCooperations = list()

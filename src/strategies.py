@@ -251,7 +251,7 @@ class Mem(Strategy):
         self.y = y
         self.genome = genome
         if name is None:  # Nom par défaut si l'utilisateur ne le définit pas
-            self.name = "Mem"+str(x)+str(y)+"_"+genome
+            self.name = "Mem"+str(x)+str(y)+"_"+genome[:max(x,y)].lower()+genome[max(x,y):].upper()
         self.myMoves = collections.deque(maxlen=x)  # contains my x last moves
         self.itsMoves = collections.deque(maxlen=y)  # contains its y last moves
 
@@ -416,8 +416,8 @@ def getPeriodics(n):
 
 def getClassicals():
     return [
-        Periodic("C"),
-        Periodic("D"),
+        Periodic("C","allC"),
+        Periodic("D","allD"),
         Tft(),
         Spiteful(),
         SoftMajority(),
