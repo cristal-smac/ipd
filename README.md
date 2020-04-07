@@ -1,14 +1,34 @@
 # IPD : the Iterated Prisoner's Dilemma
 
-This repository is a continuation of the old website [http://www.lifl.fr/IPD](http://www.lifl.fr/IPD) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma. This repository has now been deleted to reappear here.
+This repository is a continuation of the old website [http://www.lifl.fr/IPD](https://web.archive.org/web/1998*/www.lifl.fr/ipd) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma (thanks to the Wayback Machine). This repository has now been deleted to reappear here.
 
-It contains Python code (see [refCard.pdf](ipd_refCard.pdf) for a really short introduction) and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and gives many tools for sophisticated experiments.
+It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and gives many tools for sophisticated experiments. It is also useful to reproduce most of the experiences of our research articles cited in the bibliography.
 
 Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
 
 Contact : philippe.mathieu at univ-lille.fr
 
 In this repository there are several jupyter notebooks in Python which contain both explanations and exercises on this field. Their objective is primarily pedagogical.
+
+## Quick start
+
+```python
+from ipd import *
+from strategies import *
+from tools import *
+
+bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
+e= Ecological(g,bag, 1000, pop=[100])
+e.run()
+e.tournament.matrix
+e.historic
+e.drawPlot()
+```
+
+## Gallery
+A [Gallery](Gallery) of many remarkable curves is available. A [refCard.pdf](ipd_refCard.pdf) for a really short introduction.
+
+# Notebooks
 
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
