@@ -9,7 +9,6 @@ import itertools
 import datetime
 
 import game
-from strategies import Mem
 
 scores = [(3, 3), (0, 5), (5, 0), (1, 1)]
 g = game.Game(scores, ["C", "D"])
@@ -52,8 +51,8 @@ class Meeting(Evaluator):
             self.s2_score += self.game.scores["y"][act.index(c1), act.index(c2)]
 
     def prettyPrint(self,max=20) :
-        print("{:8}\t{} = {}".format(m.s1.name, ' '.join(map(str, m.s1_rounds)) , m.s1_score))
-        print("{:8}\t{} = {}".format(m.s2.name, ' '.join(map(str, m.s2_rounds)) , m.s2_score))
+        print("{:8}\t{} = {}".format(self.s1.name, ' '.join(map(str, self.s1_rounds)) , self.s1_score))
+        print("{:8}\t{} = {}".format(self.s2.name, ' '.join(map(str, self.s2_rounds)) , self.s2_score))
 
 
 class Tournament(Evaluator):
@@ -256,16 +255,6 @@ class Ecological(Evaluator):
         else : plt.savefig(file,dpi=1000)
         plt.close()
         
-
-def getAllMemory(x, y):
-    if x + y > 4:
-        return "Not possible to calculate"
-    len_genome = max(x, y) + 2 ** (x + y)
-    permut = [p for p in itertools.product(["C", "D"], repeat=len_genome)]
-    genomes = ["".join(p) for p in permut]
-    return [Mem(x, y, gen) for gen in genomes]
-
-
 
 
 

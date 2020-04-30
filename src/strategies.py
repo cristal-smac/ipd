@@ -472,3 +472,69 @@ class MetaStrategy(Strategy):
             self.scores[self.cpt] = self.scores[self.cpt] + 5
         self.bag[self.cpt].update(my, his)
         self.nbPlayed[self.cpt] += 1
+
+        
+        
+def getAllMemory(x, y):
+    if x + y > 4:
+        return "Not possible to calculate"
+    len_genome = max(x, y) + 2 ** (x + y)
+    permut = [p for p in itertools.product(["C", "D"], repeat=len_genome)]
+    genomes = ["".join(p) for p in permut]
+    return [Mem(x, y, gen) for gen in genomes]
+
+
+
+class Proba(Strategy):
+    def __init__(self, first,p1,p2,p3, p4, name=None):
+        super().__init__()
+        self.first=first
+        self.p1=p1
+        self.p2=p2
+        self.p3=p3
+        self.p4=p4
+        self.name = "proba{}_{:1.1f}_{:1.1f}_{:1.1f}_{:1.1f})".format(first,p1,p2,p3,p4) if (name is None) else name
+
+    def getAction(self, tick):
+        if (tick == 0):
+            return self.first
+
+        rnd = np.random.uniform(0,1)
+
+        if (self.myPrevious == 'C' and self.itsPrevious == 'C'):
+            return 'C' if (rnd < self.p1) else 'D'
+
+        if (self.myPrevious == 'C' and self. itsPrevious == 'D'):
+            return 'C' if (rnd < self.p2) else 'D'
+
+        if (self.myPrevious == 'D' and self.itsPrevious == 'C'):
+            return 'C' if (rnd < self.p3) else 'D'
+
+        # if (self.myPrevious == 'D' and self.itsPrevious == 'D'):
+        return 'C' if (rnd < self.p4) else 'D'
+
+        assert 1==2 , "Should never be here !"
+        
+    def clone(self):
+        object = Proba(self.first,self.p1,self.p2,self.p3,self.p4, self.name)
+        return object
+
+    def update(self, my, his):
+        self.myPrevious = my
+        self.itsPrevious = his
+
+
+
+# if K=5 we generate 0/5 1/5 2/5 3/5 4/5 5/5  , thus 2*6^4 = 2592
+# if K=4 we generate 0/4 1/4 2/4 3/4 4/4      , thus 2*5^4 = 1250
+# if K=2 we generate 0/2 1/2 2/2              , thus 2*3^4 =  162
+def getAllProba(K, possibleFirst=['C','D']):
+    strats = []
+    for first in possibleFirst:
+        for p1 in range(K+1):
+            for p2 in range(K+1):
+                for p3 in range(K+1):
+                    for p4 in range(K+1):
+                        strats.append(Proba(first,p1/K,p2/K,p3/K,p4/K))
+    return strats
+
