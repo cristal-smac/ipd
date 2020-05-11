@@ -493,7 +493,7 @@ class Proba(Strategy):
         self.p2=p2
         self.p3=p3
         self.p4=p4
-        self.name = "proba{}_{:1.1f}_{:1.1f}_{:1.1f}_{:1.1f})".format(first,p1,p2,p3,p4) if (name is None) else name
+        self.name = "proba{}_{:1.1f}_{:1.1f}_{:1.1f}_{:1.1f}".format(first,p1,p2,p3,p4) if (name is None) else name
 
     def getAction(self, tick):
         if (tick == 0):
