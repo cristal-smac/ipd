@@ -25,7 +25,7 @@ e.drawPlot()
 ```
 
 ## Gallery
-A [Gallery](Gallery) of many remarkable curves is available. A [refCard.pdf](ipd_refCard.pdf) is also available for a really short introduction.
+A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.pdf](ipd_refCard.pdf) is also available for a really short introduction.
 
 # Notebooks
 
