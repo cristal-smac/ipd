@@ -450,12 +450,18 @@ class MetaStrategy(Strategy):
         self.nbPlayed = [0 for i in range(len(bag))]
 
     def getAction(self, tick):
+        # si c'est l'amorce , on les joue toutes tout à tour
         if tick < self.n * len(self.bag):
             if tick % self.n == 0:
-                self.cpt = (self.cpt + 1) % len(self.bag)
+                self.cpt = (self.cpt + 1)
+                #print(self.scores, '->', self.cpt, '  ',end='')
+        # ensuite on joue celle qui a eu le meilleur score toutes n étapes
         else:
             if tick % self.n == 0:
                 self.cpt = np.argmax(self.scores)
+                #print(self.scores,'->',self.cpt,'  ',  end='')
+                #print(self.cpt,'  ',  end='')
+                self.scores[self.cpt]=0
         #print("Playing : "+self.bag[self.cpt].name)
         #print(self.nbPlayed[self.cpt])
         return self.bag[self.cpt].getAction(self.nbPlayed[self.cpt])
@@ -468,13 +474,13 @@ class MetaStrategy(Strategy):
             self.scores[self.cpt] = self.scores[self.cpt] + 3
         elif his == "D" and my == "D":
             self.scores[self.cpt] = self.scores[self.cpt] + 1
-        elif his == "D" and my == "C":
+        elif his == "C" and my == "D":
             self.scores[self.cpt] = self.scores[self.cpt] + 5
         self.bag[self.cpt].update(my, his)
         self.nbPlayed[self.cpt] += 1
 
-        
-        
+
+
 def getAllMemory(x, y):
     if x + y > 4:
         return "Not possible to calculate"
