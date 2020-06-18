@@ -107,27 +107,15 @@ class Tournament(Evaluator):
         self.cooperations = self.cooperations.reindex(columns=rows)
 
 
-#class Ecological(Evaluator):
-#    def __init__(self, game, strategies, length=1000, repeat=1, pop=100):
-#        self.strategies = strategies
-#        self.pop = pop
-#        self.game = game
-#        self.length = length
-#        self.generation = 0  # Numéro de la génération actuelle
-#        self.base = pop * len(strategies)
-#        self.historic = pd.DataFrame(columns=[strat.name for strat in strategies])
-#        self.historic.loc[0] = [pop for x in range(len(strategies))]
-#        self.extinctions = dict((s.name, math.inf) for s in strategies)
-#        self.cooperations = dict((s.name, 0) for s in strategies)
-
 
 class Ecological(Evaluator):
-    def __init__(self, game, strategies, length=1000, repeat=1, pop=100):
+    def __init__(self, game, strategies, length=1000, repeat=1, pop=100, max_iter=1000):
         self.strategies = strategies
         self.pop = pop
         self.game = game
         self.length = length
         self.generation = 0  # Numéro de la génération actuelle
+        self.max_iter=max_iter
         self.historic = pd.DataFrame(columns=[strat.name for strat in strategies])
         if type(pop) == int:
             self.historic.loc[0] = [pop for x in range(len(strategies))]
@@ -146,7 +134,7 @@ class Ecological(Evaluator):
     def run(self):
         dead = 0
         stab = False
-        while (self.generation < 1000) and (not stab):
+        while (self.generation < self.max_iter) and (not stab):
             parents = list(copy.copy(self.historic.loc[self.generation]))
             for i in range(len(self.strategies)):
                 strat = self.strategies[i].name
