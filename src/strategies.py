@@ -435,14 +435,18 @@ def getClassicals():
         SpitefulCC(),
         TftSpiteful(),
         Gradual(False),
-        Mem(1,2,"ccCDCDDCDD","Winner12")
+        Mem(1,2,"ccCDCDDCDD","Winner12"),
+        MetaStrategy([Tft(),Periodic("C","allC"),Spiteful(),Periodic("CCD","perCCD")],4,"badbet")
     ]
 
 
 class MetaStrategy(Strategy):
-    def __init__(self, bag, n):
+    def __init__(self, bag, n, name=None):
         super().__init__()
-        self.name = "metastrat"
+        if name is None:
+            name = ''.join([s.name[:1] for s in bag])
+        else:
+            self.name = name
         self.bag = bag
         self.n = n
         self.scores = [0 for i in range(len(bag))]
