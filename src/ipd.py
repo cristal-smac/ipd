@@ -136,6 +136,7 @@ class Ecological(Evaluator):
         stab = False
         while (self.generation < self.max_iter) and (not stab):
             parents = list(copy.copy(self.historic.loc[self.generation]))
+            # On calcule le score d'1 représentant d'une stratégie contre tout le monde
             for i in range(len(self.strategies)):
                 strat = self.strategies[i].name
                 if self.historic.at[self.generation, strat] != 0:
@@ -160,9 +161,15 @@ class Ecological(Evaluator):
                                     self.historic.at[self.generation, strat2]
                                     * self.tournament.cooperations.at[strat, strat2]
                                 )
+                        # le tableau scores contient pour chaque
+                        # stratégie le score cumulé qu'un représentant
+                        # de cette stratégie obtient contre tous les
+                        # représentants de toutes les autres
+                        # stratégies
                         self.scores[strat] = score
                         self.cooperations[strat] = cooperations
 
+            # total : tous les points distribués sur la population globale
             total = 0
             totalCooperations = 0
             for strat in self.strategies:
@@ -174,12 +181,15 @@ class Ecological(Evaluator):
                     self.cooperations[strat.name]
                     * self.historic.at[self.generation, strat.name]
                 )
+            # calcul des nouvelles populations
             for strat in self.strategies:
                 parent = self.historic.at[self.generation, strat.name]
                 if self.scores[strat.name] != 0:
                     self.historic.at[self.generation + 1, strat.name] = math.floor(
                         self.base * parent * self.scores[strat.name] / total
                     )
+                # fitness est le score qu'une famille a obtenue
+                # newpop = base * fitness / total
                 elif self.scores[strat.name] == 0:
                     self.historic.at[self.generation + 1, strat.name] = 0
                     dead += 1

@@ -5,7 +5,9 @@ import itertools
 from ipd import *
 
 
-def subClasses(soup, n, length=10):
+# Toutes les combinaisons de n stratégies prises dans la soupe
+# une stratégie ne participe donc pas à tout, mais toutes les stratégies participent exactement à autant de compétitions au total.
+def subClasses(soup, n, length=1000):
     if n > len(soup):
         print("The soup size must be smaller than n")
         return
@@ -49,7 +51,9 @@ def subClasses(soup, n, length=10):
     )
 
 
-def subClassesWithOneStrat(soup, n, strategy, printAll=False, length=10):
+# toutes les combinaisons de n stratégies prises dans la soupe avec systématiquement une stratégie ajoutée
+# La stratégie ajoutée est toujours présente et est donc confrontée à des environnements variés
+def subClassesWithOneStrat(soup, n, strategy, printAll=False, length=1000):
     if n > len(soup):
         print("The soup size must be smaller than n")
         return
@@ -101,12 +105,15 @@ def subClassesWithOneStrat(soup, n, strategy, printAll=False, length=10):
             )
         )
     else:
-        print("Strategy ranking  : " + strategy.name)
+        print("Ranking of " + strategy.name)
         print(res.loc[strategy.name, :])
-    return bestComp, worstComp, strategy
+    return bestComp, worstComp, ranks, strategy
 
 
-def subClassesRandomWithOneStrat(p, soup, n, strategy, printAll=False, length=10):
+
+# p compétitions de n stratégies prises au hasard, avec une stratégie systématiquement ajoutée
+# Comparativement à la méthode précédente, celle ci est utile quand le nombre de combinaisons explose
+def subClassesRandomWithOneStrat(p, soup, n, strategy, printAll=False, length=1000):
     if n > len(soup):
         "the soup size must be smaller than n"
         return
