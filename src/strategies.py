@@ -73,7 +73,7 @@ class Tf2t(Strategy):
         self.hisPast += his
 
 
-class Hardtft(Strategy):
+class HardTft(Strategy):
     def __init__(self):
         super().__init__()
         self.name = "hardtft"
@@ -89,13 +89,13 @@ class Hardtft(Strategy):
                 return "C"
 
     def clone(self):
-        return Hardtft()
+        return HardTft()
 
     def update(self, my, his):
         self.hisPast += his
 
 
-class Slowtft(Strategy):
+class SlowTft(Strategy):
     def __init__(self):
         super().__init__()
         self.name = "slowtft"
@@ -114,7 +114,7 @@ class Slowtft(Strategy):
                 return self.myPast[-1]
 
     def clone(self):
-        return Slowtft()
+        return SlowTft()
 
     def update(self, my, his):
         self.hisPast += his
@@ -428,8 +428,8 @@ def getClassicals():
         Periodic("CD"),
         Pavlov(),
         Tf2t(),
-        Hardtft(),
-        Slowtft(),
+        HardTft(),
+        SlowTft(),
         Gradual(),
         Prober(),
         SpitefulCC(),
