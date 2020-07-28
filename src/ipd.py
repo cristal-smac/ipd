@@ -56,6 +56,62 @@ class Meeting(Evaluator):
 
 
 class Tournament(Evaluator):
+    def __init__(self, game, strategies, length=1000):
+        self.strategies = strategies
+        self.game = game
+        self.length = length
+        size = len(strategies)
+        df = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int32))
+        df.columns, df.index = (
+            [s.name for s in self.strategies] + ["Total"],
+            [s.name for s in self.strategies],
+        )
+        self.matrix = df
+        df2 = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int32))
+        df2.columns, df2.index = (
+            [s.name for s in self.strategies] + ["Total"],
+            [s.name for s in self.strategies],
+        )
+        self.cooperations = df2
+
+    def run(self):
+        # on ne calcule que la diagonale de la matrice
+        for i in range(0, len(self.strategies)):
+            for j in range(i, len(self.strategies)):
+                meet = Meeting(
+                    self.game, self.strategies[i], self.strategies[j], self.length
+                )
+                meet.run()
+                # on range le score d'une rencontre
+                self.matrix.at[
+                    self.strategies[i].name, self.strategies[j].name
+                ] = meet.s1_score
+                # et si les 2 sont différentes, on range aussi le symétrique
+                if (i != j):
+                    self.matrix.at[
+                        self.strategies[j].name, self.strategies[i].name
+                    ] = meet.s2_score
+                # Idem pour les cooperations
+                self.cooperations.at[
+                    self.strategies[i].name, self.strategies[j].name
+                ] = meet.nb_cooperation_s1
+                if (i != j):
+                    self.cooperations.at[
+                        self.strategies[j].name, self.strategies[i].name
+                    ] = meet.nb_cooperation_s2
+        # On calcule le Total des gains pour pouvoir trier
+        self.matrix["Total"] = self.matrix.sum(axis=1)
+        self.matrix.sort_values(by="Total", ascending=False, inplace=True)
+        rows = list(self.matrix.index) + ["Total"]
+        self.matrix = self.matrix.reindex(columns=rows)
+        # A MON AVIS Y'A UN BUG ICI : ON DEVRAIT TRIER SUR LE TOTAL DES SCORES (et pas des cooperations) ?????  A REVOIR
+        self.cooperations["Total"] = self.cooperations.sum(axis=1)
+        self.cooperations.sort_values(by="Total", ascending=False, inplace=True)
+        rows = list(self.cooperations.index) + ["Total"]
+        self.cooperations = self.cooperations.reindex(columns=rows)
+
+        
+class TournamentVictory(Evaluator):
     def __init__(self, game, strategies, length=1000, repeat=1):
         self.strategies = strategies
         self.game = game
@@ -73,79 +129,75 @@ class Tournament(Evaluator):
             [s.name for s in self.strategies] + ["Total"],
             [s.name for s in self.strategies],
         )
-        self.cooperations = df2
 
     def run(self):
         for k in range(self.repeat):
             for i in range(0, len(self.strategies)):
-                for j in range(i, len(self.strategies)):
+                for j in range(i+1, len(self.strategies)):
                     meet = Meeting(
                         self.game, self.strategies[i], self.strategies[j], self.length
                     )
                     meet.run()
-                    self.matrix.at[
-                        self.strategies[i].name, self.strategies[j].name
-                    ] += meet.s1_score
-                    if (i != j):
+                    if meet.s1_score > meet.s2_score :
+                        self.matrix.at[
+                            self.strategies[i].name, self.strategies[j].name
+                        ] += 1
                         self.matrix.at[
                             self.strategies[j].name, self.strategies[i].name
-                        ] += meet.s2_score
-                    self.cooperations.at[
-                        self.strategies[i].name, self.strategies[j].name
-                    ] += meet.nb_cooperation_s1
-                    if (i != j):
-                        self.cooperations.at[
+                        ] -= 1
+                    elif  meet.s2_score > meet.s1_score : 
+                        self.matrix.at[
                             self.strategies[j].name, self.strategies[i].name
-                        ] += meet.nb_cooperation_s2
+                        ] += 1
+                        self.matrix.at[
+                            self.strategies[i].name, self.strategies[j].name
+                        ] -= 1               
         self.matrix["Total"] = self.matrix.sum(axis=1)
         self.matrix.sort_values(by="Total", ascending=False, inplace=True)
         rows = list(self.matrix.index) + ["Total"]
         self.matrix = self.matrix.reindex(columns=rows)
-        self.cooperations["Total"] = self.cooperations.sum(axis=1)
-        self.cooperations.sort_values(by="Total", ascending=False, inplace=True)
-        rows = list(self.cooperations.index) + ["Total"]
-        self.cooperations = self.cooperations.reindex(columns=rows)
 
-
-
+        
+        
 class Ecological(Evaluator):
-    def __init__(self, game, strategies, length=1000, repeat=1, pop=100, max_iter=1000):
-        self.strategies = strategies
+    def __init__(self, tournament, pop=100, max_iter=1000):
         self.pop = pop
-        self.game = game
-        self.length = length
+        self.max_iter = max_iter
+        self.tournament = tournament
         self.generation = 0  # Numéro de la génération actuelle
-        self.max_iter=max_iter
-        self.historic = pd.DataFrame(columns=[strat.name for strat in strategies])
+        self.historic = pd.DataFrame(columns=[strat.name for strat in tournament.strategies])
+        # Si on passe un entier, c'est la même population pour toutes les stratégies
         if type(pop) == int:
-            self.historic.loc[0] = [pop for x in range(len(strategies))]
-            self.base = pop * len(strategies)
+            self.historic.loc[0] = [pop for x in range(len(tournament.strategies))]
+            self.base = pop * len(tournament.strategies)
         else :
-            assert len(pop)==len(strategies)
+        # sinon on utilise les populations passées en paramètre pour chaque stratégie
+            assert len(pop)==len(tournament.strategies)
             self.historic.loc[0] = pop
             self.base = sum(pop)
-        self.extinctions = dict((s.name, math.inf) for s in strategies)
-        self.cooperations = dict((s.name, 0) for s in strategies)
+        # On initialise les différents tableaux    
+        self.extinctions = dict((s.name, math.inf) for s in tournament.strategies)
+        self.cooperations = dict((s.name, 0) for s in tournament.strategies)
         self.listeCooperations = list()
-        self.scores = dict((s.name, 0) for s in strategies)
-        self.tournament = Tournament(self.game, self.strategies, length, repeat)
-        self.tournament.run()
+        self.scores = dict((s.name, 0) for s in tournament.strategies)
 
     def run(self):
         dead = 0
         stab = False
         while (self.generation < self.max_iter) and (not stab):
             parents = list(copy.copy(self.historic.loc[self.generation]))
-            # On calcule le score d'1 représentant d'une stratégie contre tout le monde
-            for i in range(len(self.strategies)):
-                strat = self.strategies[i].name
+            # Calcul de la descendance d'une stratégie i face à toutes les autres
+            for i in range(len(self.tournament.strategies)):
+                strat = self.tournament.strategies[i].name
                 if self.historic.at[self.generation, strat] != 0:
                     score = 0
                     cooperations = 0
-                    for j in range(len(self.strategies)):
-                        strat2 = self.strategies[j].name
+                    # On cumule les points que l'on peut obtenir contre chaque famille, y compris la sienne
+                    for j in range(len(self.tournament.strategies)):
+                        strat2 = self.tournament.strategies[j].name
                         if self.historic.at[self.generation, strat2] != 0:
                             if i == j:
+                                # quand on joue contre ses semblables, on ne joue pas contre sois-même
                                 score += (
                                     self.historic.at[self.generation, strat] - 1
                                 ) * self.tournament.matrix.at[strat, strat2]
@@ -153,6 +205,7 @@ class Ecological(Evaluator):
                                     self.historic.at[self.generation, strat] - 1
                                 ) * self.tournament.cooperations.at[strat, strat2]
                             else:
+                                # par contre, on joue contre tous les autres
                                 score += (
                                     self.historic.at[self.generation, strat2]
                                     * self.tournament.matrix.at[strat, strat2]
@@ -172,7 +225,7 @@ class Ecological(Evaluator):
             # total : tous les points distribués sur la population globale
             total = 0
             totalCooperations = 0
-            for strat in self.strategies:
+            for strat in self.tournament.strategies:
                 total += (
                     self.scores[strat.name]
                     * self.historic.at[self.generation, strat.name]
@@ -182,7 +235,8 @@ class Ecological(Evaluator):
                     * self.historic.at[self.generation, strat.name]
                 )
             # calcul des nouvelles populations
-            for strat in self.strategies:
+            # Une fois qu'on a fait tous les cumuls on fait une règle de 3 pour se ramener à la même base
+            for strat in self.tournament.strategies:
                 parent = self.historic.at[self.generation, strat.name]
                 if self.scores[strat.name] != 0:
                     self.historic.at[self.generation + 1, strat.name] = math.floor(
@@ -201,10 +255,10 @@ class Ecological(Evaluator):
                     self.extinctions[strat.name] = (
                         self.historic.at[self.generation + 1, strat.name] * 1000
                     )
-                if dead == len(self.strategies) - 1:
+                if dead == len(self.tournament.strategies) - 1:
                     stab = True
             self.listeCooperations.append(
-                totalCooperations / (self.base * self.length * len(self.strategies))
+                totalCooperations / (self.base * self.tournament.length * len(self.tournament.strategies))
             )
             self.generation += 1
             if parents == list(self.historic.loc[self.generation]):
@@ -214,15 +268,15 @@ class Ecological(Evaluator):
         for t in trie:
             df_trie[t[0]] = self.historic[t[0]]
         self.historic = df_trie
-        return self.historic
+
 
     def saveData(self):
         date = datetime.datetime.now()
         self.historic.to_csv(str(date) + ".csv", sep=";", encoding="utf-8")
 
     def drawPlot(self, nbCourbes=None, nbLegends=None, file='', title=''):
-        nbCourbes = len(self.strategies) if (nbCourbes == None) else nbCourbes
-        nbLegends = len(self.strategies) if (nbLegends == None) else nbLegends
+        nbCourbes = len(self.tournament.strategies) if (nbCourbes == None) else nbCourbes
+        nbLegends = len(self.tournament.strategies) if (nbLegends == None) else nbLegends
         strat = self.historic.columns.tolist()
         for i in range(nbCourbes):
             plt.plot(
