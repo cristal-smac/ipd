@@ -17,7 +17,8 @@ from ipd import *
 from strategies import *
 
 bag=[Periodic("D"), HardMajority(), Tft(), Spiteful(),  Gradual()]
-e= Ecological(g,bag, 1000, pop=[100])
+t= Tournament(g,bag)        # default: length=1000
+e= Ecological(t)            # default: pop=100
 e.run()
 e.tournament.matrix
 e.historic
