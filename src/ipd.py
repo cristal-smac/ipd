@@ -130,6 +130,7 @@ class Ecological(Evaluator):
         # Modifié pour que ça prenne l'ordre du resultat du Tournament comme dans Moran
         # avant c'était columns= [strat.name for strat in tournament.strategies])
         # Si on passe un entier, c'est la même population pour toutes les stratégies
+        self.base=np.int64(0)  # ajouté pour garantir les calculs en 64bits
         if type(pop) == int:
             self.historic.loc[0] = [pop for x in range(len(tournament.strategies))]
             self.base = pop * len(tournament.strategies)
