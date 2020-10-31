@@ -64,13 +64,13 @@ class Tournament(Evaluator):
         self.game = game
         self.length = length
         size = len(strategies)
-        df = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int32))
+        df = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int64))
         df.columns, df.index = (
             [s.name for s in self.strategies] + ["Total"],
             [s.name for s in self.strategies],
         )
         self.matrix = df
-        df2 = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int32))
+        df2 = pd.DataFrame(np.zeros((size, size + 1), dtype=np.int64))
         df2.columns, df2.index = (
             [s.name for s in self.strategies] + ["Total"],
             [s.name for s in self.strategies],
@@ -130,7 +130,6 @@ class Ecological(Evaluator):
         # Modifié pour que ça prenne l'ordre du resultat du Tournament comme dans Moran
         # avant c'était columns= [strat.name for strat in tournament.strategies])
         # Si on passe un entier, c'est la même population pour toutes les stratégies
-        self.base=np.int64(0)  # ajouté pour garantir les calculs en 64bits
         if type(pop) == int:
             self.historic.loc[0] = [pop for x in range(len(tournament.strategies))]
             self.base = pop * len(tournament.strategies)
