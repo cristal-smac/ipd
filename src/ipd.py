@@ -107,13 +107,15 @@ class Tournament(Evaluator):
                     ] = meet.nb_cooperation_s2
         # On calcule le Total des gains pour pouvoir trier
         self.matrix["Total"] = self.matrix.sum(axis=1)
+        self.cooperations["Total"] = self.matrix["Total"] # pour trier les 2 dans le même ordre
         self.matrix.sort_values(by="Total", ascending=False, inplace=True)
         rows = list(self.matrix.index) + ["Total"]
         self.matrix = self.matrix.reindex(columns=rows)
-        self.cooperations["Total"] = self.cooperations.sum(axis=1)
         self.cooperations.sort_values(by="Total", ascending=False, inplace=True)
         rows = list(self.cooperations.index) + ["Total"]
         self.cooperations = self.cooperations.reindex(columns=rows)
+        # on met cette fois la bonne valeur au Total des cooperations
+        self.cooperations["Total"] = self.cooperations.iloc[:,0:-1].sum(axis=1)
 
         
 #  To use only with deterministic strategy sets. Nothing is repeated
@@ -221,8 +223,13 @@ class Ecological(Evaluator):
                 if dead == len(self.tournament.strategies) - 1:
                     stab = True
             #
+            #
+            # Pour arriver à 100% il ne faut pas prendre base, mais l'effectif exact restant
+            effectifexact = int((self.historic[-2:-1].sum(axis=1)).iloc[0])
+
             self.listeCooperations.append(
-                totalCooperations / (self.base * self.tournament.length * len(self.tournament.strategies))
+                # totalCooperations / (self.base * self.tournament.length * len(self.tournament.strategies))
+                100 * totalCooperations / (effectifexact * (effectifexact -1) * self.tournament.length)
             )
             self.generation += 1
             if parents == list(self.historic.loc[self.generation]):
