@@ -434,8 +434,9 @@ def getClassicals():
         Prober(),
         SpitefulCC(),
         TftSpiteful(),
-        Gradual(False),
         Mem(1,2,"ccCDCDDCDD","Winner12"),
+        Mem(2,1,"dcCDCDCDDD","Winner21"),
+        Gradual(False),
         MetaStrategy([Tft(),Periodic("C","allC"),Spiteful(),Periodic("CCD","perCCD")],4,"badbet")
     ]
 
