@@ -4,7 +4,7 @@ This repository is a continuation of the old website [http://www.lifl.fr/IPD](ht
 
 It contains Python code and Jupyter notebooks to understand easily how to experiment computational game theory, build and evaluate strategies at the iterated prisoner's dilemma (IPD) and gives many tools for sophisticated experiments. It is also useful to reproduce most of the experiences of our research articles cited in the bibliography.
 
-Team : P Mathieu, JP Delahaye, B Beaufils, L Fodil, C Petitpre  ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
+Team : P Mathieu, JP Delahaye, B Beaufils ([CRISTAL Lab](http://www.cristal.univ-lille.fr), [SMAC team](https://www.cristal.univ-lille.fr/?rubrique27&eid=17), [Lille University](http://www.univ-lille.fr))
 
 Contact : philippe.mathieu at univ-lille.fr
 
@@ -29,6 +29,14 @@ e.drawPlot()
 A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.pdf](ipd_refCard.pdf) is also available for a really short introduction.
 
 # Notebooks
+
+
+## NEW : Notebook for JFSMA
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
+
+## NEW : Notebook for IEEE Evolutionary Computation
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
+
 
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
