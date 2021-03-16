@@ -30,6 +30,14 @@ A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.p
 
 # Notebooks
 
+
+## <span style="color:red">NEW : Notebook for JFSMA</span>
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolution_fr.ipynb)
+
+## <span style="color:red">NEW : Notebook for IEEE Evolutionary Computation</span>
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolution_fr.ipynb)
+
+
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
 English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=EN/gametheory_en.ipynb)
