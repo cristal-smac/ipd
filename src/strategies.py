@@ -211,7 +211,7 @@ class HardMajority(Strategy):
 class Gradual(Strategy):
     def __init__(self, hard=True):
         super().__init__()
-        self.name = "gradual_"+("hard" if hard else "soft")
+        self.name = "gradual"+("" if hard else "_soft")
         self.nbTrahisons = 0
         self.punish = 0
         self.calm = 0
