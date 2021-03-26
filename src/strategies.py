@@ -441,6 +441,35 @@ def getMem11():
             Mem(1,1,"dDDDD","mem11_dDDDD-alld")
             ]
 
+# 26 strategies if we remove identicals
+def getSimplifiedMem11():
+    return [Mem(1,1,"cCCCC","mem11_cCC**-allc"),
+            Mem(1,1,"cCDCC","mem11_cCDCC"),
+            Mem(1,1,"cCDCD","mem11_cCDCD-tft"),
+            Mem(1,1,"cCDDC","mem11_cCDDC-pavlov"),
+            Mem(1,1,"cCDDD","mem11_cCDDD-spite"),
+            Mem(1,1,"cDCCC","mem11_cDCCC"),
+            Mem(1,1,"cDCCD","mem11_cDCCD"),
+            Mem(1,1,"cDCDC","mem11_cDCDC"),
+            Mem(1,1,"cDCDD","mem11_cDCDD"),
+            Mem(1,1,"cDDCC","mem11_cDDCC-perCD"),
+            Mem(1,1,"cDDCD","mem11_cDDCD"),
+            Mem(1,1,"cDDDC","mem11_cDDDC"),
+            Mem(1,1,"cDDDD","mem11_cDDDD"),
+            Mem(1,1,"dCCCC","mem11_dCCCC"),
+            Mem(1,1,"dCCCD","mem11_dCCCD"),
+            Mem(1,1,"dCCDC","mem11_dCCDC"),
+            Mem(1,1,"dCDCC","mem11_dCDCC"),
+            Mem(1,1,"dCDCD","mem11_dCDCD-mistrust"),
+            Mem(1,1,"dCDDC","mem11_dCDDC"),
+            Mem(1,1,"dDCCC","mem11_dDCCC"),
+            Mem(1,1,"dDCCD","mem11_dDCCD"),
+            Mem(1,1,"dDCDC","mem11_dDCDC"),
+            Mem(1,1,"dDDCC","mem11_dDDCC-perDC"),
+            Mem(1,1,"dDDCD","mem11_dDDCD"),
+            Mem(1,1,"dDDDC","mem11_dDDDC"),
+            Mem(1,1,"dDDDD","mem11_d**DD-alld")
+            ]
 
 def getPeriodics(n):
     cards = ["C", "D"]
