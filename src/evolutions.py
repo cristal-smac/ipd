@@ -13,6 +13,32 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
+from ipd import *
+
+
+
+
+# Wrapper sur Tournament pour faire ind et com
+class Classic:
+    def __init__(self, algo, tournament, diag=0) :
+        self.tournament = tournament
+        self.matrix=tournament.matrix.iloc[:,:-1].copy()
+        self.algo=algo
+        if (algo != 'com' and algo != 'ind'):   # m2sr=com(munautary)  m2=ind(ividualistic)
+            raise ValueError("Algo inconnu :",algo)
+        if (algo=='com'):
+            np.fill_diagonal(self.matrix.values,diag)  # A MULTIPLIER PAR LONGUEUR
+    def run(self) :
+        self.matrix["Total"] = self.matrix.sum(axis=1)
+    def getRanking(self) :
+        name='ClaT_'+self.algo
+        df=pd.DataFrame(self.matrix['Total']) #, index=self.nomstrats,columns=[name]) # .sort_values(by='m2',ascending=False)
+        df.columns=[name]
+        df['rank_'+name] = df[name].rank(axis=0, ascending=False, method='average')  # min,max,first,dense
+        return df
+
+
+        
 
 #class M2Reels :
 class EvolDeterReal:
@@ -136,8 +162,14 @@ class EvolDeterInt:
         plt.savefig(self.prefix+'_M2Entier_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)+".png"  , dpi=500)
         plt.show()
         plt.close()
+    def getRanking(self) :
+        name='Det_'+self.algo
+        df=pd.DataFrame(self.historic[-1], index=self.nomstrats,columns=[name]) # .sort_values(by='m2',ascending=False)
+        df['rank_'+name] = df[name].rank(axis=0, ascending=False, method='average')  # min,max,first,dense
+        return df
+        
 
-
+        
 
 #Ex M3
 class EvolEncounter:
@@ -206,18 +238,31 @@ class EvolEncounter:
         # print(df)
         # df.to_csv(filename+".csv", index=None, sep=';')
         # chgt des noms de colonnes pour ajouter les moyennes
-        nblig=int(df.shape[0]/2)
-        moy=df[nblig:].sum()//nblig
-        moy=list(map (lambda x : int(x/self.base*1000) , moy))
+        moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
         names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
         df.columns=names
-        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))
+        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
         plt.savefig(filename+"_legende.png", dpi=500)
         #df.plot(legend=False)
         #plt.savefig(filename+".png", dpi=1000)
         plt.show()
         plt.close()
-
+    def getFinalPop(self):
+        # classically, final pop is
+        # self.historic[-1] ou pd.DataFrame(m2.historic[-1:], columns=m2.nomstrats)
+        # but here we average the lasts
+        nLast=int(len(self.historic)/4)       # start at 3/4 to compute avg
+        indLast=len(self.historic)-nLast # index of last
+        moy=pd.DataFrame(self.historic[indLast:],columns=self.nomstrats).sum()//nLast
+        return moy
+    def getRanking(self) :               #for stochastic methods, tanking is based on the avg of the 3/4 last pop
+        name='Enc_'+self.algo
+        # it's a Serie, not a df
+        # rank computed on getFinalPop, not historic[-1] to be more robust
+        df = pd.DataFrame(self.getFinalPop().transpose(), columns=[name])
+        df['rank_'+name] = df[name].rank(axis=0, ascending=False, method='average')  # min,max,first,dense
+        return df
+        
 
 
 # Ex M5
@@ -283,18 +328,300 @@ class EvolFermi:
     def drawPlot(self):
         df=pd.DataFrame(self.historic, columns=self.nomstrats)
         tmillis = int(round(time.time() * 1000))
-        filename=self.prefix+'_EvolEncounter_'+self.algo+'_'+str(tmillis)+'.png'
+        filename=self.prefix+'_EvolFermi_'+self.algo+'_'+str(tmillis)+'.png'
         # print(df)
         # df.to_csv(filename+".csv", index=None, sep=';')
         # chgt des noms de colonnes pour ajouter les moyennes
-        nblig=int(df.shape[0]/2)
-        moy=df[nblig:].sum()//nblig
-        moy=list(map (lambda x : int(x/self.base*1000) , moy))
+        moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
         names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
         df.columns=names
-        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))
+        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
         plt.savefig(filename+"_legende.png", dpi=500)
         #df.plot(legend=False)
         #plt.savefig(filename+".png", dpi=1000)
         plt.show()
         plt.close()
+    def getFinalPop(self):
+        # classically, final pop is
+        # self.historic[-1] ou pd.DataFrame(m2.historic[-1:], columns=m2.nomstrats)
+        # but here we average the lasts
+        nLast=int(len(self.historic)/4)       # start at 3/4 to compute avg
+        indLast=len(self.historic)-nLast # index of last
+        moy=pd.DataFrame(self.historic[indLast:],columns=self.nomstrats).sum()//nLast
+        return moy
+    def getRanking(self) :               #for stochastic methods, tanking is based on the avg of the 3/4 last pop
+        name='Fer_'+self.algo
+        # it's a Serie, not a df
+        # rank computed on getFinalPop, not historic[-1] to be more robust
+        df = pd.DataFrame(self.getFinalPop().transpose(), columns=[name])
+        df['rank_'+name] = df[name].rank(axis=0, ascending=False, method='average')  # min,max,first,dense
+        return df
+
+
+
+
+# Ex M4
+# EvolMoran
+class EvolMoran:
+    def __init__(self, algo, tournament, population, itermax, prefix=''):
+        self.nbstrats = len(tournament.strategies)
+        self.idxstrats=list(range(self.nbstrats))
+        self.nomstrats=tournament.matrix.index.values
+        self.scores = tournament.matrix.iloc[0:self.nbstrats,0:self.nbstrats].values.copy()
+        # soit c'est la meme pop pour tout le monde, soit c'est un tableau
+        if (type(population)==int) :
+            self.population=np.array([population]*self.nbstrats  , dtype=int)
+        else :
+            self.population=np.array(population, dtype=int)    # un npArray pour pouvoir faire /total
+        self.base=sum(self.population)
+        self.itermax=itermax
+        self.algo=algo
+        self.prefix=prefix
+        if (self.algo != 'com' and self.algo != 'ind'):   # com(munautary) ex m2sr ;   ind(ividualistic) ex m2
+            raise ValueError("Algo inconnu :",algo)
+        # diagonale à zero sur la matrice
+        if (self.algo=='com'):
+            np.fill_diagonal(self.scores,0)    # A MULTIPLIER PAR LONGUEUR
+        self.historic=[self.population.copy()]     # un copy sinon on pointe toujours sur la même population !!
+    def run(self) :
+        #  abstraction du n-1 quand un individu joue contre sa propre famille    
+        for iter in range(self.itermax) :
+            fitnessStr = self.population * np.dot(self.scores,self.population)
+            # print(self.population)  # TRACE A SUPPRIMER
+            # ----- La seule ligne differente entre m3 et m4 -------
+            winner = np.random.choice(self.idxstrats, size=1, replace=False, p=fitnessStr/sum(fitnessStr))
+            looser = np.random.choice(self.idxstrats, size=1, replace=False, p=self.population/self.base)          
+            # chaque population est incrémentee de +1/-1
+            self.population[winner]+=1
+            self.population[looser]-=1
+            #-------------------------------------------------------
+            assert(self.base == sum(self.population))
+            # On ne garde que 1000 points sur la totalité des itérations
+            # if (self.itermax>2000 and iter%(self.itermax//1000)==1):
+            self.historic.append(self.population.copy())
+        # j'affiche juste le resultat final
+        print(self.population ,'\t-> ', self.nomstrats[np.array(self.population).argmax()] )
+    def drawPlot(self):
+        df=pd.DataFrame(self.historic, columns=self.nomstrats)
+        tmillis = int(round(time.time() * 1000))
+        filename=self.prefix+'_EvolMoran_'+self.algo+'_'+str(tmillis)+'.png'
+        # print(df)
+        # df.to_csv(filename+".csv", index=None, sep=';')
+        # chgt des noms de colonnes pour ajouter les moyennes
+        moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
+        names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
+        df.columns=names
+        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
+        plt.savefig(filename+"_legende.png", dpi=500)
+        #df.plot(legend=False)
+        #plt.savefig(filename+".png", dpi=1000)
+        plt.show()
+        plt.close()
+    def getFinalPop(self):
+        # classically, final pop is
+        # self.historic[-1] ou pd.DataFrame(m2.historic[-1:], columns=m2.nomstrats)
+        # but here we average the lasts
+        nLast=int(len(self.historic)/4)       # start at 3/4 to compute avg
+        indLast=len(self.historic)-nLast # index of last
+        moy=pd.DataFrame(self.historic[indLast:],columns=self.nomstrats).sum()//nLast
+        return moy
+    def getRanking(self) :               #for stochastic methods, tanking is based on the avg of the 3/4 last pop
+        name='Mor_'+self.algo
+        # it's a Serie, not a df
+        # rank computed on getFinalPop, not historic[-1] to be more robust
+        df = pd.DataFrame(self.getFinalPop().transpose(), columns=[name])
+        df['rank_'+name] = df[name].rank(axis=0, ascending=False, method='average')  # min,max,first,dense
+        return df
+
+
+# Calcule et cumule les distances entre soit des algos déterministes (5), soit tout (11)
+# afin de permettre in fine d'afficher un dendogramme de comparaison de ces méthodes
+# Attention : si methods='all' ça lance toutes les méthodes stochastiques autant de fois qu'il y a de bags !
+# Près de 2h30 de calcul !
+def cumulativeDistanceMatrix(bags,methods='Deterministic'):  # all  or deterministic)
+    print(methods)
+    cumulresult=pd.DataFrame()
+    cumulrank=pd.DataFrame()
+    for i in range(len(bags)) :
+        print("------------- ",i," -----------------")
+        res,rank = resultMatrix(bags[i],repeat=5,methods=methods)
+        # dist sur les resultats
+        dres = dist(res)
+        print('-- result normé : --\n',res)
+        print('-- dist result :--\n',dres)
+        # dist sur les rangs
+        drank = rank.corr(method='spearman')
+        drank=1-drank
+        print('-- rank : --\n',rank)
+        print('-- dist rank :--\n',drank)
+        # cumul
+        if cumulresult.empty:
+            cumulresult=dres
+            cumulrank=drank
+        else:
+            cumulresult += dres
+            cumulrank += drank
+    return (cumulresult, cumulrank)
+
+
+from math import sqrt
+
+def dist(df):
+    x = pd.DataFrame(columns=df.columns, index=df.columns)
+    for i in (range(df.shape[1])):
+        for j in (range(df.shape[1])):
+            x.iloc[i,j]= sqrt(sum((df.iloc[:,i]-df.iloc[:,j])**2))
+    return x
+
+
+# renvoie une matrice de rangs normalisée Les rangs sont calculés
+# selon la méthode des moyennes en cas d'aexeco
+# Les méthodes stochastiques sont répétées Repeat fois leurs classements cumulés
+def resultMatrix(bag,repeat=5,methods='Deterministic',normalized=True):  # ADSTECI
+    methods=methods[0].capitalize()
+    print(methods)
+    #(A)ll, (D)eterministic, (S)tochastics, (T)tournaments, (E)volutionaries, (C)ommunautary evol,  (I)ndividualistic evol
+    
+    t=Tournament(g,bag,100)
+#    g = game.Game([(2, 2), (0, 3), (3, 0), (1, 1)], ["C", "D"])
+#    t=Tournament(g,bag,100)
+    t.run()
+
+    results=pd.DataFrame(index=[s.name for s in bag])
+    ranks=pd.DataFrame(index=[s.name for s in bag])
+        
+    if methods in 'ADT' :
+        tb = TournamentVictory(t)
+        tb.run()
+        x= pd.DataFrame(tb.matrix.loc[:,['Total']]+len(bag) )      # pour score
+        x.columns=['VicT']
+        if normalized:
+            x.iloc[:,0] = (x.iloc[:,0]*1)/sum(x.iloc[:,0])
+        results = results.join(x, how='inner')
+        y= pd.DataFrame(tb.matrix.loc[:,['Total']])                 # pour rank
+        y['rank_VicT'] = y['Total'].rank(axis=0, ascending=False, method='average')
+        ranks = ranks.join(y.iloc[:,1], how='inner')  # keep only rang
+        
+    if methods in 'ADT' :
+        c=Classic('ind',t)
+        c.run()
+        x = c.getRanking() # first col=score, second=rank
+        if normalized:
+            x.iloc[:,0] = (x.iloc[:,0]*1)/sum(x.iloc[:,0])
+        results=results.join(x.iloc[:,0].to_frame() , how='inner')
+        ranks=ranks.join(x.iloc[:,1] , how='inner')      
+        
+    if methods in 'ADT' :    
+        c=Classic('com',t)
+        c.run()
+        x = c.getRanking() # first col=score, second=rank
+        if normalized:
+            x.iloc[:,0] = (x.iloc[:,0]*1)/sum(x.iloc[:,0])
+        results=results.join(x.iloc[:,0].to_frame() , how='inner')
+        ranks=ranks.join(x.iloc[:,1] , how='inner')      
+
+    if methods in 'ADEI' :    
+        m2=EvolDeterInt('ind', t , 100 , 1000, '')
+        m2.run()
+        x = m2.getRanking() # first col=score, second=rank
+        if normalized:
+            x.iloc[:,0] = (x.iloc[:,0]*1)/sum(x.iloc[:,0])
+        results=results.join(x.iloc[:,0].to_frame() , how='inner')
+        ranks=ranks.join(x.iloc[:,1] , how='inner')      
+
+    if methods in 'ADEC' :        
+        m2=EvolDeterInt('com', t , 100 , 1000, '')
+        m2.run()
+        x = m2.getRanking() # first col=score, second=rank
+        if normalized:
+            x.iloc[:,0] = (x.iloc[:,0]*1)/sum(x.iloc[:,0])
+        results=results.join(x.iloc[:,0].to_frame() , how='inner')
+        ranks=ranks.join(x.iloc[:,1] , how='inner')      
+
+    # LIMIT OF DETERMINISTIC METHODS
+        
+    if methods in 'ASEI' :            
+        m2=EvolEncounter('ind', t , 200000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Enc_ind'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Enc_Ind') , how='inner')
+        print('evolEncounterInd done')
+
+    if methods in 'ASEC' :
+        m2=EvolEncounter('com', t , 200000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Enc_com'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Enc_com') , how='inner')
+        print('evolEncounterCom done')
+
+    if methods in 'ASEI' :                
+        m2=EvolFermi('ind', t , 200000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Fer_ind'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Fer_ind') , how='inner')
+        print('evolFermiInd done')
+
+    if methods in 'ASEC' :                
+        m2=EvolFermi('com', t , 200000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Fer_com'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Fer_com') , how='inner')
+        print('evolFermiCom done')
+
+    if methods in 'ASEI' :                
+        m2=EvolMoran('ind', t , 1000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Mor_ind'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Mor_ind') , how='inner')
+        print('evolMoranInt done')
+
+    if methods in 'ASEC' :
+        m2=EvolMoran('com', t , 1000 , 200000, '')
+        x=pd.Series(index=m2.nomstrats, dtype=np.int64)
+        for i in range(repeat):
+            m2.run()
+            x = x+m2.getFinalPop()
+        if normalized :
+            x = (x*1)/sum(x)
+        results = results.join(x.to_frame(name='Mor_com'), how='inner')
+        # then we compute the rank on the cumulation, and not the converse
+        r=x.rank(axis=0,ascending=False, method='average')
+        ranks = ranks.join(r.to_frame(name='Rank_Mor_com') , how='inner')
+        print('evolMoranCom done')
+
+    return (results,ranks)
