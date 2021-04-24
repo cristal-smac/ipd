@@ -214,10 +214,11 @@ class EvolEncounter:
             self.population[players[1]]+=self.scores[players[1],players[0]]
             # destruction des individus selon la population : il faut verifier qu'on ne tombe pas dans le negatif
             # on les enleve d'1 coup au lieu de les enlever 1 par 1 : approximation de la methode pure
-            toDestroy = self.scores[players[0],players[1]] + self.scores[players[1],players[0]]
-            coeff = toDestroy / (sum(self.population) + toDestroy)
+                     # toDestroy = self.scores[players[0],players[1]] + self.scores[players[1],players[0]]
+                     # coeff = 1 - (toDestroy / (sum(self.population) + toDestroy))
+            coeff = self.base / sum(self.population)
             # pop2 = [x-int(x/coeff) for x in population]
-            self.population = np.array(list(map(lambda x : int(x*(1-coeff)) , self.population)))
+            self.population = np.array(list(map(lambda x : int(x*coeff) , self.population)))
             # il se peut que sum(population) < total .... dans CompetEcolo on s'en fout
             ecart = self.base - sum(self.population)
             # population[np.random.randint(self.nbstrats)] += ecart
@@ -308,10 +309,11 @@ class EvolFermi:
             self.population[players[1]]+=self.scores[players[1],players[0]]
             # destruction des individus selon la population : il faut verifier qu'on ne tombe pas dans le negatif
             # on les enleve d'1 coup au lieu de les enlever 1 par 1 : approximation de la methode pure
-            toDestroy = self.scores[players[0],players[1]] + self.scores[players[1],players[0]]
-            coeff = toDestroy / (sum(self.population) + toDestroy)
+                    # toDestroy = self.scores[players[0],players[1]] + self.scores[players[1],players[0]]
+                    #coeff = toDestroy / (sum(self.population)) # + toDestroy)
+            coeff = self.base / sum(self.population)
             # pop2 = [x-int(x/coeff) for x in population]
-            self.population = np.array(list(map(lambda x : int(x*(1-coeff)) , self.population)))
+            self.population = np.array(list(map(lambda x : int(x*coeff) , self.population)))
             # il se peut que sum(population) < total .... dans CompetEcolo on s'en fout
             ecart = self.base - sum(self.population)
             # population[np.random.randint(self.nbstrats)] += ecart
@@ -625,3 +627,71 @@ def resultMatrix(bag,repeat=5,methods='Deterministic',normalized=True):  # ADSTE
         print('evolMoranCom done')
 
     return (results,ranks)
+
+
+
+
+# bag : the bag to use (list of strategies)
+# meth : the method to use  (DeterInt, Encounter, Moran,Fermi)
+# algo : ind (individualistic) or com (communautarian)
+# pops : list of lists of pop starting points (of size=len(bag))
+def draw_polygon(bag,meth,algo,pops,name=None) :
+    m1=Tournament(g,bag,100)
+    m1.run()
+    
+    # tracé du polygone
+    fig = plt.figure(figsize=(10, 10))
+    nbstrats = len(m1.strategies)
+    xs=[]
+    ys=[]
+    for k in range(nbstrats) :
+        xs.append(np.sin(k*2*np.pi/nbstrats))
+        ys.append(np.cos(k*2*np.pi/nbstrats))
+        plt.text(np.sin(k*2*np.pi/nbstrats) , np.cos(k*2*np.pi/nbstrats) ,m1.matrix.columns[k] , size='xx-large')
+    plt.fill(xs+xs[:1], ys+ys[:1] , 'mistyrose')
+    plt.plot(xs+xs[:1], ys+ys[:1], 'black')
+
+    # Calcul des trajectoires    
+    for pop in pops :
+        if (meth=='DeterReal'):
+            m2=EvolDeterReal(algo,m1, np.array(pop)/sum(pop), 10000, '', resilience=0)
+        elif (meth=='DeterInt'):
+            m2=EvolDeterInt(algo, m1,pop,1000,'')
+        elif (meth=='Encounter'):
+            m2=EvolEncounter(algo,m1,pop,100000)
+        elif (meth=='Moran'):
+            m2=EvolMoran(algo,m1,pop,100000)
+        elif (meth=='Fermi'):
+            m2=EvolFermi(algo,m1,pop,100000)
+        else :
+            plt.close()
+            raise ValueError("Methode inconnue :",meth)
+        m2.run()
+        
+        # pourcentages finaux : print(m2.historic[-1] *1.0 / sum(m2.historic[-1]))
+        # print("duree d'evolution ",len(m2.historic))
+        # Trace des convergences dans le cas Reel : print(m2.historic[-1])
+        # print("taux coop final en entiers : ",m2.cooperationList[-1])
+        
+        # On trace au maximum 500 segments par trajectoire
+        df = pd.DataFrame(m2.historic[::max(1,len(m2.historic)//500)], columns=m2.nomstrats)
+        #df = pd.DataFrame(m2.historic[::], columns=m2.nomstrats)
+        for i in range(df.shape[0]) :
+            # df.loc[i,'abs']= sum(np.array(df.loc[i])[0:3] * [a,b,c])  / sum(df.loc[i][0:3])
+            df.loc[i,'abs']= np.inner(np.array(df.loc[i])[0:nbstrats] , xs)  / sum(df.loc[i][0:nbstrats])
+            df.loc[i,'ord']= sum(np.array(df.loc[i])[0:nbstrats] * ys) / sum(df.loc[i][0:nbstrats])
+            plt.plot(df.iloc[-1,-2],df.iloc[-1,-1], 'bo')
+        plt.plot(df['abs'], df['ord'])
+    # eventuellement on retrace le dernier point s'il est effacé 
+    print(df.iloc[-1,:])
+    plt.plot(df.iloc[-1,-2],df.iloc[-1,-1], 'bo')
+
+    plt.axis('off')
+    if name==None:
+        tmillis = int(round(time.time() * 1000))  # millisec 
+        name=str(len(bag))+'str_polygon_'+meth+'_'+algo+'_'+str(tmillis)
+    print('figure sauvée : ' +name)
+    plt.savefig(name, dpi=500)
+    plt.show()
+    plt.close()
+
