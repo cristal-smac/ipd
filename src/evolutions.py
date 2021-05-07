@@ -42,12 +42,11 @@ class Classic:
 
 #class M2Reels :
 class EvolDeterReal:
-    def __init__(self, algo, tournament, population, itermax, prefix, resilience=0, diag=0) :
+    def __init__(self, algo, tournament, population, itermax, resilience=0, diag=0) :
         nbstrats = len(tournament.strategies)
         self.nomstrats=tournament.matrix.index.values
         self.scores = tournament.matrix.iloc[0:nbstrats,0:nbstrats].values.copy()
         self.population=np.array(population)
-        self.prefix = prefix
         self.itermax=itermax
         self.resilience=resilience
         self.algo=algo
@@ -68,21 +67,24 @@ class EvolDeterReal:
             diff=self.historic[-1] - self.historic[-2]
             ident = list(filter(lambda x : abs(x)>(1/100000.0) , diff)) == []
             i=i+1
-    def drawPlot(self) :
+    def drawPlot(self, filename=None) :
         df = pd.DataFrame(self.historic, columns=self.nomstrats)
-        df.plot(grid=True) # , title="M2Reels "+self.algo , figsize=(10,6))  # Defaut figsize=(6,4)
+        df.plot(grid=True) # , title="DetReels "+self.algo , figsize=(10,6))  # Defaut figsize=(6,4)
         ax=plt.gca()  # gca : get current axes
         ax.set_facecolor('#F0F0F0')
-
-        tmillis = int(round(time.time() * 1000))    
-        plt.savefig(self.prefix+'_M2Reel_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis), dpi=500)
+        if filename==None:
+            tmillis = int(round(time.time() * 1000))    
+            filename=str(len(self.nomstrats))+'str_DetReal_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)
+            print(filename)
+        plt.savefig(filename, dpi=500)
+        print('figure sauvée : ' +filename)
         plt.show()
         plt.close()
 
         
 #class M2Entiers :
 class EvolDeterInt:
-    def __init__(self, algo, tournament, population, itermax, prefix, strict=True , resilience=0 , diag=0) :
+    def __init__(self, algo, tournament, population, itermax, strict=True , resilience=0 , diag=0) :
         nbstrats = len(tournament.strategies)
         self.tournament=tournament
         self.nomstrats=tournament.matrix.index.values
@@ -98,7 +100,6 @@ class EvolDeterInt:
         self.cooperationList=[] # decalage de 1 par rapport aux pops
         self.cooperationMatrix=tournament.cooperations.iloc[0:nbstrats,0:nbstrats].values
         self.strict=strict
-        self.prefix=prefix
         self.algo=algo
         if (algo != 'com' and algo != 'ind'):   # com(munautary) ex m2sr ;   ind(ividualistic) ex m2
             raise ValueError("Algo inconnu :",algo)
@@ -152,14 +153,16 @@ class EvolDeterInt:
             identiques = np.all(self.historic[-1] == self.historic[-2])
             identiques = identiques or (nbSurvivants==1) # 1 seul non nul (pb avec com (m2sr))
             i=i+1
-    def drawPlot(self) :
+    def drawPlot(self,filename=None) :
         df = pd.DataFrame(self.historic, columns=self.nomstrats)
         df.plot(grid=True) # , title="M2Entier "+self.algo , figsize=(10,6))  # Defaut figsize=(6,4)
         ax=plt.gca()  # gca : get current axes
         ax.set_facecolor('#F0F0F0')
-
-        tmillis = int(round(time.time() * 1000))    
-        plt.savefig(self.prefix+'_M2Entier_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)+".png"  , dpi=500)
+        if filename==None:
+            tmillis = int(round(time.time() * 1000))    
+            filename=str(len(self.nomstrats))+'str_DetInt_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)
+        plt.savefig(filename, dpi=500)
+        print('figure sauvée : ' +filename)
         plt.show()
         plt.close()
     def getRanking(self) :
@@ -173,7 +176,7 @@ class EvolDeterInt:
 
 #Ex M3
 class EvolEncounter:
-    def __init__(self, algo, tournament, population, itermax, prefix=''):
+    def __init__(self, algo, tournament, population, itermax):
         self.nbstrats = len(tournament.strategies)
         self.idxstrats=list(range(self.nbstrats))
         self.nomstrats=tournament.matrix.index.values
@@ -186,7 +189,6 @@ class EvolEncounter:
         self.base=sum(self.population)
         self.itermax=itermax
         self.algo=algo
-        self.prefix=prefix
         if (self.algo != 'com' and self.algo != 'ind'):   # com(munautary) ex m2sr ;   ind(ividualistic) ex m2
             raise ValueError("Algo inconnu :",algo)
         # diagonale à zero sur la matrice
@@ -232,20 +234,23 @@ class EvolEncounter:
             self.historic.append(self.population.copy())
         # j'affiche juste le resultat final
         print(self.population ,'\t-> ', self.nomstrats[np.array(self.population).argmax()] )
-    def drawPlot(self):
+    def drawPlot(self, filename=None):
         df=pd.DataFrame(self.historic, columns=self.nomstrats)
-        tmillis = int(round(time.time() * 1000))
-        filename=self.prefix+'_EvolEncounter_'+self.algo+'_'+str(tmillis)+'.png'
         # print(df)
         # df.to_csv(filename+".csv", index=None, sep=';')
         # chgt des noms de colonnes pour ajouter les moyennes
         moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
         names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
         df.columns=names
-        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
-        plt.savefig(filename+"_legende.png", dpi=500)
-        #df.plot(legend=False)
-        #plt.savefig(filename+".png", dpi=1000)
+        df.plot(markevery=self.itermax//1000 , grid=True) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
+        #df.plot(legend=False)   # Pour PLS
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        if filename==None:
+            tmillis = int(round(time.time() * 1000))    
+            filename=str(len(self.nomstrats))+'str_EvolEncounter_'+self.algo+'_'+str(tmillis)
+        plt.savefig(filename, dpi=500)
+        print('figure sauvée : ' +filename)
         plt.show()
         plt.close()
     def getFinalPop(self):
@@ -269,7 +274,7 @@ class EvolEncounter:
 # Ex M5
 # EvolEncounter et EvolFermi sont batis exactement sur le même code
 class EvolFermi:
-    def __init__(self, algo, tournament, population, itermax, prefix=''):
+    def __init__(self, algo, tournament, population, itermax):
         self.nbstrats = len(tournament.strategies)
         self.idxstrats=list(range(self.nbstrats))
         self.nomstrats=tournament.matrix.index.values
@@ -282,7 +287,6 @@ class EvolFermi:
         self.base=sum(self.population)
         self.itermax=itermax
         self.algo=algo
-        self.prefix=prefix
         if (self.algo != 'com' and self.algo != 'ind' and self.algo != 'pls'):   # com(munautary) ex m2sr ;   ind(ividualistic) ex m2
             raise ValueError("Algo inconnu :",algo)
         # diagonale à zero sur la matrice
@@ -327,20 +331,23 @@ class EvolFermi:
             self.historic.append(self.population.copy())
         # j'affiche juste le resultat final
         print(self.population ,'\t-> ', self.nomstrats[np.array(self.population).argmax()] )
-    def drawPlot(self):
+    def drawPlot(self,filename=None):
         df=pd.DataFrame(self.historic, columns=self.nomstrats)
-        tmillis = int(round(time.time() * 1000))
-        filename=self.prefix+'_EvolFermi_'+self.algo+'_'+str(tmillis)+'.png'
         # print(df)
         # df.to_csv(filename+".csv", index=None, sep=';')
         # chgt des noms de colonnes pour ajouter les moyennes
         moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
         names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
         df.columns=names
-        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
-        plt.savefig(filename+"_legende.png", dpi=500)
-        #df.plot(legend=False)
-        #plt.savefig(filename+".png", dpi=1000)
+        df.plot(markevery=self.itermax//1000 , grid=True) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
+        #df.plot(legend=False)  # pour PLS
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        if filename==None:
+            tmillis = int(round(time.time() * 1000))    
+            filename=str(len(self.nomstrats))+'str_EvolFermi_'+self.algo+'_'+str(tmillis)
+        plt.savefig(filename, dpi=500)
+        print('figure sauvée : ' +filename)
         plt.show()
         plt.close()
     def getFinalPop(self):
@@ -365,7 +372,7 @@ class EvolFermi:
 # Ex M4
 # EvolMoran
 class EvolMoran:
-    def __init__(self, algo, tournament, population, itermax, prefix=''):
+    def __init__(self, algo, tournament, population, itermax):
         self.nbstrats = len(tournament.strategies)
         self.idxstrats=list(range(self.nbstrats))
         self.nomstrats=tournament.matrix.index.values
@@ -378,7 +385,6 @@ class EvolMoran:
         self.base=sum(self.population)
         self.itermax=itermax
         self.algo=algo
-        self.prefix=prefix
         if (self.algo != 'com' and self.algo != 'ind'):   # com(munautary) ex m2sr ;   ind(ividualistic) ex m2
             raise ValueError("Algo inconnu :",algo)
         # diagonale à zero sur la matrice
@@ -403,20 +409,23 @@ class EvolMoran:
             self.historic.append(self.population.copy())
         # j'affiche juste le resultat final
         print(self.population ,'\t-> ', self.nomstrats[np.array(self.population).argmax()] )
-    def drawPlot(self):
+    def drawPlot(self, filename=None):
         df=pd.DataFrame(self.historic, columns=self.nomstrats)
-        tmillis = int(round(time.time() * 1000))
-        filename=self.prefix+'_EvolMoran_'+self.algo+'_'+str(tmillis)+'.png'
         # print(df)
         # df.to_csv(filename+".csv", index=None, sep=';')
         # chgt des noms de colonnes pour ajouter les moyennes
         moy=list(map (lambda x : int(x/self.base*1000) , self.getFinalPop()))
         names=list(map (lambda x : x[0]+' '+str(x[1]) , list(zip(df.columns,moy))))
         df.columns=names
-        df.plot(markevery=self.itermax//1000) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
-        plt.savefig(filename+"_legende.png", dpi=500)
-        #df.plot(legend=False)
-        #plt.savefig(filename+".png", dpi=1000)
+        df.plot(markevery=self.itermax//1000 , grid=True) # x=list(range(1,itermax,(itermax//1000)))  # We take 1000 points, not more
+        #df.plot(legend=False)  # pour PLS
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        if filename==None:
+            tmillis = int(round(time.time() * 1000))    
+            filename=str(len(self.nomstrats))+'str_EvolMoran_'+self.algo+'_'+str(tmillis)
+        plt.savefig(filename, dpi=500)
+        print('figure sauvée : ' +filename)     
         plt.show()
         plt.close()
     def getFinalPop(self):
@@ -440,13 +449,13 @@ class EvolMoran:
 # afin de permettre in fine d'afficher un dendogramme de comparaison de ces méthodes
 # Attention : si methods='all' ça lance toutes les méthodes stochastiques autant de fois qu'il y a de bags !
 # Près de 2h30 de calcul !
-def cumulativeDistanceMatrix(bags,methods='Deterministic'):  # all  or deterministic)
+def cumulativeDistanceMatrix(bags, repeat=5, methods='Deterministic'):  # all  or deterministic)
     print(methods)
     cumulresult=pd.DataFrame()
     cumulrank=pd.DataFrame()
     for i in range(len(bags)) :
         print("------------- ",i," -----------------")
-        res,rank = resultMatrix(bags[i],repeat=5,methods=methods)
+        res,rank = resultMatrix(bags[i],repeat=repeat,methods=methods)
         # dist sur les resultats
         dres = dist(res)
         print('-- result normé : --\n',res)
@@ -654,9 +663,9 @@ def draw_polygon(bag,meth,algo,pops,name=None) :
     # Calcul des trajectoires    
     for pop in pops :
         if (meth=='DeterReal'):
-            m2=EvolDeterReal(algo,m1, np.array(pop)/sum(pop), 10000, '', resilience=0)
+            m2=EvolDeterReal(algo,m1, np.array(pop)/sum(pop), 10000, resilience=0)
         elif (meth=='DeterInt'):
-            m2=EvolDeterInt(algo, m1,pop,1000,'')
+            m2=EvolDeterInt(algo, m1,pop,1000)
         elif (meth=='Encounter'):
             m2=EvolEncounter(algo,m1,pop,100000)
         elif (meth=='Moran'):
@@ -690,8 +699,8 @@ def draw_polygon(bag,meth,algo,pops,name=None) :
     if name==None:
         tmillis = int(round(time.time() * 1000))  # millisec 
         name=str(len(bag))+'str_polygon_'+meth+'_'+algo+'_'+str(tmillis)
-    print('figure sauvée : ' +name)
     plt.savefig(name, dpi=500)
+    print('figure sauvée : ' +name)
     plt.show()
     plt.close()
 
