@@ -74,8 +74,7 @@ class EvolDeterReal:
         ax.set_facecolor('#F0F0F0')
         if filename==None:
             tmillis = int(round(time.time() * 1000))    
-            filename=str(len(self.nomstrats))+'str_DetReal_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)
-            print(filename)
+            filename=str(len(self.nomstrats))+'str_DetReal_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)+'.png'
         plt.savefig(filename, dpi=500)
         print('figure sauvée : ' +filename)
         plt.show()
@@ -160,7 +159,7 @@ class EvolDeterInt:
         ax.set_facecolor('#F0F0F0')
         if filename==None:
             tmillis = int(round(time.time() * 1000))    
-            filename=str(len(self.nomstrats))+'str_DetInt_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)
+            filename=str(len(self.nomstrats))+'str_DetInt_'+self.algo+'_res'+str(self.resilience)+'_'+str(tmillis)+'.png'
         plt.savefig(filename, dpi=500)
         print('figure sauvée : ' +filename)
         plt.show()
@@ -248,7 +247,7 @@ class EvolEncounter:
         ax.set_facecolor('#F0F0F0')
         if filename==None:
             tmillis = int(round(time.time() * 1000))    
-            filename=str(len(self.nomstrats))+'str_EvolEncounter_'+self.algo+'_'+str(tmillis)
+            filename=str(len(self.nomstrats))+'str_EvolEncounter_'+self.algo+'_'+str(tmillis)+'.png'
         plt.savefig(filename, dpi=500)
         print('figure sauvée : ' +filename)
         plt.show()
@@ -345,7 +344,7 @@ class EvolFermi:
         ax.set_facecolor('#F0F0F0')
         if filename==None:
             tmillis = int(round(time.time() * 1000))    
-            filename=str(len(self.nomstrats))+'str_EvolFermi_'+self.algo+'_'+str(tmillis)
+            filename=str(len(self.nomstrats))+'str_EvolFermi_'+self.algo+'_'+str(tmillis)+'.png'
         plt.savefig(filename, dpi=500)
         print('figure sauvée : ' +filename)
         plt.show()
@@ -423,7 +422,7 @@ class EvolMoran:
         ax.set_facecolor('#F0F0F0')
         if filename==None:
             tmillis = int(round(time.time() * 1000))    
-            filename=str(len(self.nomstrats))+'str_EvolMoran_'+self.algo+'_'+str(tmillis)
+            filename=str(len(self.nomstrats))+'str_EvolMoran_'+self.algo+'_'+str(tmillis)+'.png'
         plt.savefig(filename, dpi=500)
         print('figure sauvée : ' +filename)     
         plt.show()
