@@ -149,7 +149,7 @@ class EvolDeterInt:
             self.cooperationList.append(pcoop)
             
             # calcul de l'arret : 2 pop consecutives identiques
-            identiques = np.all(self.historic[-1] == self.historic[-2])
+            identiques = np.all(self.historic[-1] == self.historic[-2])  # or sum(self.historic[-1] - self.historic[-2]) == 0
             identiques = identiques or (nbSurvivants==1) # 1 seul non nul (pb avec com (m2sr))
             i=i+1
     def drawPlot(self,filename=None) :
