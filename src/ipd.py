@@ -150,7 +150,6 @@ class Ecological(Evaluator):
         dead = 0
         stab = False
         while (self.generation < self.max_iter) and (not stab):
-            parents = list(copy.copy(self.historic.loc[self.generation]))
             # Calcul de la descendance d'une stratégie i face à toutes les autres
             for i in range(len(self.tournament.strategies)):
                 strat = self.tournament.strategies[i].name
@@ -232,7 +231,7 @@ class Ecological(Evaluator):
                 100 * totalCooperations / (effectifexact * (effectifexact -1) * self.tournament.length)
             )
             self.generation += 1
-            if parents == list(self.historic.loc[self.generation]):
+            if np.all(self.historic.iloc[-1] == self.historic.iloc[-2]):
                 stab = True
         # end of generation loop
         if self.generation==self.max_iter :
@@ -344,7 +343,7 @@ class TournamentVictory(Evaluator):
 #
 # Ces 2 classes permettent de calculer les tableaux de répétitions
 #
-# Attention dans la verion non répétée (précédente) la matrice
+# Attention dans la version non répétée (précédente) la matrice
 # contient un entier dans chaque case, tandis que dans cette version
 # la matrice contient une liste de n valeurs Par ailleurs, ces
 # versions sont paralléllisées
