@@ -255,6 +255,9 @@ class Ecological(Evaluator):
                 self.historic[strat[i]],
                 label=strat[i] if (i < nbLegends) else "_nolegend_",
             )
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        plt.grid()
         plt.legend(bbox_to_anchor=(0, 1), loc=2, borderaxespad=0.0)
         plt.ylabel("Populations")
         plt.xlabel("Generations")
@@ -270,6 +273,9 @@ class Ecological(Evaluator):
 
     def drawCooperation(self, file='', title=''):
         plt.plot(self.listeCooperations)
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        plt.grid()
         if title != '' :
             plt.title(title)
         plt.ylabel("% of cooperation")
