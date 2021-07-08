@@ -1,4 +1,4 @@
-# IPD : the Iterated Prisoner's Dilemma
+# The Iterated Prisoner's Dilemma repository
 
 This repository is a continuation of the old website [http://www.lifl.fr/IPD](https://web.archive.org/web/1998*/www.lifl.fr/ipd) created in 1998 and containing a simulator to carry out various experiments at the iterated prisoner's dilemma (thanks to the Wayback Machine). This repository has now been deleted to reappear here.
 
@@ -31,10 +31,10 @@ A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.p
 # Notebooks
 
 
-## NEW : Notebook for JFSMA
-Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
+## NEW : Notebook for SIMPAT (Softening and Hardening)
+Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
 
-## NEW : Notebook for IEEE Evolutionary Computation
+## NEW : Notebook for IEEE Evolutionary Computation (deterministic evolution)
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
 
 
