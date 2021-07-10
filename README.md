@@ -32,10 +32,10 @@ A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.p
 
 
 ## NEW : Notebook for SIMPAT (Softening and Hardening)
-Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
+English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
 
 ## NEW : Notebook for IEEE Evolutionary Computation (deterministic evolution)
-Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
+English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
 
 
 ## Game Theory
