@@ -32,10 +32,10 @@ A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.p
 # Notebooks
 
 
-## NEW : Notebook for SIMPAT (Softening and Hardening)
+## NEW : Notebook for IEEE SMC (Softening and Hardening)
 English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
 
-## NEW : Notebook for IEEE Evolutionary Computation (deterministic evolution)
+## NEW : Notebook for IEEE Trans on Cybernetics (deterministic evolution)
 English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
 
 
