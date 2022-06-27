@@ -639,6 +639,18 @@ def resultMatrix(bag,repeat=5,methods='Deterministic',normalized=True):  # ADSTE
 
 
 
+# ex: pops=oneVsAll(len(bag),1000,[20,50,100])
+def oneVsAll(size,oneAt,otherStarts) :
+    pops=[]
+    for n in otherStarts :
+        for i in range(size) :
+            p1=[n]*size
+            p1[i]=oneAt
+            pops.append(p1)
+    return pops
+
+
+
 # bag : the bag to use (list of strategies)
 # meth : the method to use  (DeterInt, Encounter, Moran,Fermi)
 # algo : ind (individualistic) or com (communautarian)
