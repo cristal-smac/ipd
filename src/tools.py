@@ -179,3 +179,80 @@ def subClassesRandomWithOneStrat(p, soup, n, strategy, printAll=False, length=10
         print(res.loc[strategy.name, :])
     return bestComp, worstComp, strategy
 
+
+
+#-------------- SIMPLIFICATION ------------------------------------------
+
+# test du un couple de strategies font le mpeme score contre un adversaire unique
+# example of use
+# print(testEquivUnit((Tft(), Spiteful())  , Periodic("CCDCD"), 100))     # False
+#print(testEquivUnit((Tft(), Mem(0,1,"cCD")),  Periodic("CCDCD"), 100))  # true
+
+def testEquivUnit(strategies, opponent, length):
+    sA,sB = strategies
+    rounds1 = []
+    rounds2  = []
+    m1 = Meeting(g, sA, opponent, length)
+    m1.run()
+    m2 = Meeting(g, sB, opponent, length)
+    m2.run()
+    if m1.s1_score == m2.s1_score :
+        if m1.s1_rounds == m2.s1_rounds :
+            return True
+    return False
+
+
+
+# Compare un couple de stratégies face à une liste d'opposants
+# Ex : testEquivMultiple((Tft(), Spiteful()),[Periodic('C'), Periodic('CDCCDDC'), Periodic('DDCDCDD')], 10)
+
+def testEquivMultiple(strategies, opponents, length):
+    for opponent in opponents : 
+        equiv = testEquivUnit(strategies, opponent, length)
+        if equiv == False :
+            return False
+    return True
+
+
+# Appel du test d'équiv de 2 stratégies sur tous les couples possibles de l
+# chaque entrée du dictionnaire correspond à un ensemble de stratégies équivalentes.
+def classesEquiv(l, opponents, length):
+    m = dict()
+    while len(l) > 0 :
+        m[l[0]] = []
+        ind = [0]
+        for j in range(len(l[1:])):
+            if testEquivMultiple([l[0], l[j + 1]], opponents, length):
+                m[l[0]] += [l[j + 1]]
+                ind += [j + 1]
+        ltmp = []
+        for i in range(len(l)):
+            if i not in ind :
+                ltmp += [l[i]]
+        l = ltmp
+    return m
+
+
+# Simplifie un ensemble de stratégies en fonction de leur resultat à un tournoi
+def simplifyWithTournament(l, opponents, length):
+    scores = dict()
+    t = Tournament(g, opponents + l, length)
+    t.run()
+    res = t.matrix['Total']
+    for strat in l : 
+        score = res[strat.name]
+        if score not in scores :
+            scores[score] = [strat]
+        else : 
+            scores[score] += [strat]
+    
+    d = dict()
+    for item in scores.values():
+        # if more than one strategy have the same score, test classesEquiv
+        if len(item) > 1 :
+            res = classesEquiv(item, opponents, length)
+            for it in res.keys():
+                d[it] = res[it]
+        else : 
+            d[item[0]] = []
+    return d
