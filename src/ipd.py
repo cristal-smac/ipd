@@ -211,6 +211,9 @@ class Ecological(Evaluator):
                 elif self.scores[strat.name] == 0:
                     self.historic.at[self.generation + 1, strat.name] = 0
                     dead += 1
+                # extinctions note le tick d'extinction de la stratégie pour trier là dessus à la fin.
+                # Soit on met l'indice d'extinction, soit la pop*1000  pour que ce soit forcement plus grand que l'indice.
+                # De cette manière on peut trier sur ce vecteur extinctions.
                 if (parent != 0) and (
                     self.historic.at[self.generation + 1, strat.name] == 0
                 ):
@@ -235,12 +238,22 @@ class Ecological(Evaluator):
                 stab = True
         # end of generation loop
         if self.generation==self.max_iter :
-            print("Warning : max_iter reached")   
-        trie = sorted(self.extinctions.items(), key=lambda t: t[1], reverse=True)
-        df_trie = pd.DataFrame()
-        for t in trie:
-            df_trie[t[0]] = self.historic[t[0]]
-        self.historic = df_trie
+            print("Warning : max_iter reached")
+        # Modif du 28/6/2022 sur le tri de l'historique pour avoir les légendes ordonnees
+        # ON REMPLACE CA
+        #trie = sorted(self.extinctions.items(), key=lambda t: t[1], reverse=True)
+        #df_trie = pd.DataFrame()
+        #for t in trie:
+        #    df_trie[t[0]] = self.historic[t[0]]
+        #self.historic = df_trie
+        #
+        # PAR CA
+        # A la toute fin, on trie historic pour avoir les legendes ordonnees sur la courbe
+        # on trie sur les valeurs d'extinction
+        order = sorted(self.extinctions.items(), key=lambda t: t[1], reverse=True)
+        # order contient les couples (strat,value) tries
+        # on reindexe sur l'ordre des strats dans ce tableau
+        self.historic = self.historic.reindex([order[i][0] for i in range(len(order))] , axis=1)
 
     def saveData(self):
         date = datetime.datetime.now()
@@ -632,6 +645,9 @@ class EcologicalRepeat(Evaluator):
                 color = line[0].get_color()
                 plt.fill_between(np.arange(self.generation), avg+std, avg-std, color=color, alpha=0.2)
         # style:
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        plt.grid()
         plt.legend(bbox_to_anchor=(0, 1), loc=2, borderaxespad=0.0)
         plt.ylabel("Populations")
         plt.xlabel("Generations")
@@ -660,6 +676,9 @@ class EcologicalRepeat(Evaluator):
         # box plot & style:
         bx = ax.boxplot(to_plot, showmeans=True, meanline=True)
         # fig style:
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        plt.grid()
         ax.set_xticklabels(ticks, rotation='vertical', fontsize='xx-small')
         ax.set(xlabel='strategies', ylabel='population')
         if title != '' :
@@ -681,6 +700,9 @@ class EcologicalRepeat(Evaluator):
         plt.ylabel("% of cooperation")
         plt.xlabel("Generations")
         plt.ylim(0, 101)
+        ax=plt.gca()  # gca : get current axes
+        ax.set_facecolor('#F0F0F0')
+        plt.grid()
         if file == '' : plt.show()
         else : plt.savefig(file,dpi=1000)
         plt.close()
