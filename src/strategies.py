@@ -61,7 +61,7 @@ class Tf2t(Strategy):
         if tick == 0 or tick == 1:
             return "C"
         else:
-            if self.hisPast[-1] == "D" and self.hisPast[-2]:
+            if self.hisPast[-1] == "D" and self.hisPast[-2] == "D":
                 return "D"
             else:
                 return "C"
