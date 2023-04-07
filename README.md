@@ -76,8 +76,8 @@ Meta-strategies are strategies that build on a set of other strategies. They pla
 
 
 # Bibliography
-- Philippe Mathieu, Jean-Paul Delahaye. **Softening and Hardening in the Iterated Prisoner’s Dilemma**. IEEE Transactions on Systems, Man, and Cybernetics: Systems, vol53, issue 2, pp. 654-663 , 2023.
-- Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, vol 97, 2019
+- Philippe Mathieu, Jean-Paul Delahaye. **Softening and Hardening in the Iterated Prisoner’s Dilemma**. IEEE Transactions on Systems, Man, and Cybernetics: Systems, vol 53, issue 2, pp. 654-663 , 2023.
+- Philippe Mathieu, Jean-Paul Delahaye. **Experimental criteria to identify efficient probabilistic memory-one strategies for the iterated prisoner’s dilemma**. Simulation Modelling Practice and Theory, Elsevier, vol 97, p. 101946, 2019
 - Philippe Mathieu, Jean-Paul Delahaye. **New Winning Strategies for the Iterated Prisoner's Dilemma**. Journal of Artificial Societies and Social Simulation, SimSoc Consortium, 2017, 20 (4)
 - Philippe Mathieu, Jean-Paul Delahaye. **New Winning Strategies for the Iterated Prisoner's Dilemma**. 14th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2015), May 2015, Istanbul, Turkey. pp.1665-1666
 - Philippe Mathieu, Bruno Beaufils, Jean-Paul Delahaye. **Studies on Dynamics in the Classical Iterated Prisoner's Dilemma with Few Strategies: Is There Any Chaos in the Pure Dilemma ?**. Proceedings of the 4th european conference on Artificial Evolution (AE'99), 1999, Dunkerque, France, France. pp.177--190
