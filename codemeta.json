@@ -1,0 +1,81 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/GPL-3.0+",
+    "codeRepository": "https://github.com/cristal-smac/ipd",
+    "dateCreated": "2018-03-16",
+    "datePublished": "2018-07-01",
+    "dateModified": "2023-12-14",
+    "name": "ipd",
+    "version": "1.0",
+    "description": "This software offers a number of tools for designing and evaluating the behaviour of iterated prisoner's dilemma strategies and other 2-player stereotyped games.",
+    "applicationCategory": "Research, Education",
+    "releaseNotes": "Bug Fixes",
+    "developmentStatus": "active",
+    "isPartOf": "https://github.com/cristal-smac",
+    "referencePublication": "https://doi.org/10.1016/j.simpat.2019.101946",
+    "keywords": [
+        "Game theory",
+        "Social dilemma",
+        "Prisoner's dilemma"
+    ],
+    "programmingLanguage": [
+        "Python"
+    ],
+    "operatingSystem": [
+        "Linux",
+        "Windows",
+        "MacOS"
+    ],
+    "softwareRequirements": [
+        "Python 3"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-2786-1209",
+            "givenName": "Philippe",
+            "familyName": "MATHIEU",
+            "email": "philippe.mathieu@univ-lille.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Lille, CNRS, Centrale Lille, UMR 9189 - CRIStAL, F-59000 Lille, France"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-8758-9908",
+            "givenName": "Jean-Paul",
+            "familyName": "DELAHAYE",
+            "email": "jean-paul.delahaye@univ-lille.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Lille, CNRS, Centrale Lille, UMR 9189 - CRIStAL, F-59000 Lille, France"
+            }
+        }
+    ],
+    "contributor": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0003-2786-1209",
+            "givenName": "Philippe",
+            "familyName": "MATHIEU",
+            "email": "philippe.mathieu@univ-lille.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Lille, CNRS, Centrale Lille, UMR 9189 - CRIStAL, F-59000 Lille, France"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-8758-9908",
+            "givenName": "Jean-Paul",
+            "familyName": "DELAHAYE",
+            "email": "jean-paul.delahaye@univ-lille.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Univ. Lille, CNRS, Centrale Lille, UMR 9189 - CRIStAL, F-59000 Lille, France"
+            }
+        }
+    ]
+}
