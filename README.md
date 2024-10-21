@@ -31,11 +31,15 @@ A [Gallery](Gallery#readme) of many remarkable curves is available. A [refCard.p
 
 # Notebooks
 
-## NEW : Notebook for Evolutionary computation (deterministic evolution)
-English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
+
+## NEW : Notebook for journal Evolutionary Computation (stochastic evolution)
+French : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnStochasticEvolutions_fr.ipynb)
+
+## NEW : Notebook for xxx (deterministic evolution)
+French : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnDeterministicEvolutions_fr.ipynb)
 
 ## NEW : Notebook for IEEE SMC Systems , fev 2023 (Softening and Hardening)
-English : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
+French : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/studiesOnSofteningAndHardening.ipynb)
 
 ## Game Theory
 Français : [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/cristal-smac/ipd.git/master?filepath=FR/gametheory_fr.ipynb)
