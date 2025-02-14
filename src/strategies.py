@@ -4,27 +4,48 @@ import collections
 
 
 class Strategy:
+    """Basic Strategy Interface"""
     def setMemory(self, mem):
         pass
 
-    def getAction(self, tick):
+    def getAction(self, tick: int) -> str:
+        """
+        Returns the action taken by the strategy at a given tick.
+        tick (int) : turn number of the game
+        """
         pass
 
     def __copy__(self):
         pass
 
-    def update(self, x, y):
+    def update(self, x: str, y: str) -> None:
         pass
 
 
 class Periodic(Strategy):
-    def __init__(self, sequence, name=None):
+    """Periodic strategy
+    -----------------
+    Given a sequence, will give each character of the sequence and repeat itself.
+
+    Parameters
+    ----------
+    sequence : `str`
+        the sequence it should iterate through. Must be composed by "C" and "D".
+    name : `str`, optional
+        the name given to this strategy.
+
+    Notes
+    -----
+    To make a "Always Defect" or "Always Cooperate" strategy, simply use `Periodic("D")` or `Periodic("C")`.
+    """
+    def __init__(self, sequence: str, name: str=None):
         super().__init__()
         self.sequence = sequence.upper()
         self.step = 0
         self.name = "per_" + sequence if (name is None) else name
 
-    def getAction(self, tick):
+    def getAction(self, tick: int) -> str:
+        # for each tick, will return a char of the sequence, and loop itself
         return self.sequence[tick % len(self.sequence)]
 
     def clone(self):
@@ -36,6 +57,19 @@ class Periodic(Strategy):
 
 
 class Tft(Strategy):
+    """Tit-For-Tat strategy
+    --------------------
+    Will cooperate on the first turn.
+    Then will copy the action done by the opponent's last turn.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |
+    |-----------|-----|-----|-----|-----|-----|
+    | Tft       |  C  |  C  |  D  |  C  |  C  |
+    | Opponent  |  C  |  D  |  C  |  C  |  C  |
+    """
+
     def __init__(self):
         super().__init__()
         self.name = "tft"
@@ -52,6 +86,19 @@ class Tft(Strategy):
 
 
 class Tf2t(Strategy):
+    """Tit-For-2Tat strategy
+    --------------------
+    Will cooperate on the two first turn.
+    If the opponent defects two consecutive times, will defect.
+    Else, cooperate.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |
+    |-----------|-----|-----|-----|-----|-----|
+    | Tf2t      |  C  |  C  |  C  |  D  |  C  |
+    | Opponent  |  C  |  D  |  D  |  C  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "tf2t"
@@ -74,6 +121,23 @@ class Tf2t(Strategy):
 
 
 class HardTft(Strategy):
+    """Hard Tit-For-Tat strategy
+    --------------------
+    Will cooperate on the first turn.
+    If the opponent has defected on the last or the second-last turn, will defect.
+    Else, cooperate.
+
+    Notes
+    -----
+    If defected, he will always defect one more time than the opponent.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|-----|
+    | HardTft   |  C  |  C  |  D  |  D  |  D  |  C  |  D  |  D  |
+    | Opponent  |  C  |  D  |  C  |  D  |  C  |  C  |  D  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "hardtft"
@@ -96,6 +160,20 @@ class HardTft(Strategy):
 
 
 class SlowTft(Strategy):
+    """Slow Tit-For-Tat strategy
+    --------------------
+    Will cooperate the first two turns.
+    If the opponent's two last moves were the same, copy the opponent's last move.
+    Else, do its last move.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|
+    | SlowTft   |  C  |  C  |  C  |  D  |  D  |  C  |  C  |
+    | Opponent  |  C  |  D  |  D  |  C  |  C  |  D  |  C  |
+    """
+
     def __init__(self):
         super().__init__()
         self.name = "slowtft"
@@ -122,6 +200,18 @@ class SlowTft(Strategy):
 
 
 class Spiteful(Strategy):
+    """Spiteful strategy
+    --------------------
+    Will cooperate on the first turn.
+    If the opponent defects just one time, he will defect every time.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |
+    |-----------|-----|-----|-----|-----|-----|
+    | Spiteful  |  C  |  C  |  D  |  D  |  D  |
+    | Opponent  |  C  |  D  |  C  |  D  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "spiteful"
@@ -145,6 +235,23 @@ class Spiteful(Strategy):
 
 
 class Mistrust(Strategy):
+    """Mistrust strategy
+    --------------------
+    Will defect on the first turn.
+    Then will copy the action done by the opponent's last turn.
+
+    Notes
+    -----
+    Is the "defect" counterpart of `Tit-For-Tat`.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |
+    |-----------|-----|-----|-----|-----|-----|-----|
+    | Mistrust  |  D  |  C  |  D  |  C  |  C  |  D  |
+    | Opponent  |  C  |  D  |  C  |  C  |  D  |  D  |
+    """
+
     def __init__(self):
         super().__init__()
         self.name = "mistrust"
@@ -163,6 +270,24 @@ class Mistrust(Strategy):
 
 
 class SoftMajority(Strategy):
+    """Soft Majority strategy
+    -------------------------
+    Will count the number of cooperation and defection of the opponent.
+    If they are an equal number or more cooperation, will cooperate.
+    Else, will defect.
+
+    Notes
+    -----
+    Will always cooperate on the first turn.
+    Is the "cooperate" counterpart of the `Hard Majority` strategy.
+
+    Interactions
+    ------------
+    | Turn          |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |---------------|-----|-----|-----|-----|-----|-----|-----|
+    | SoftMajority  |  C  |  C  |  C  |  D  |  C  |  D  |  C  |
+    | Opponent      |  C  |  D  |  D  |  C  |  D  |  C  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "softmajo"
@@ -186,6 +311,24 @@ class SoftMajority(Strategy):
 
 
 class HardMajority(Strategy):
+    """Hard Majority strategy
+    -------------------------
+    Will count the number of cooperation and defection of the opponent.
+    If there are strictly more cooperations, will cooperate.
+    Else, will defect.
+
+    Notes
+    -----
+    Will always defect on the first turn.
+    Is the "defect" counterpart of the `Soft Majority` strategy.
+
+    Interactions
+    ------------
+    | Turn          |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |---------------|-----|-----|-----|-----|-----|-----|-----|
+    | HardMajority  |  D  |  C  |  D  |  C  |  C  |  C  |  D  |
+    | Opponent      |  C  |  D  |  C  |  C  |  D  |  D  |  D  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "hardmajo"
@@ -209,6 +352,28 @@ class HardMajority(Strategy):
 
 
 class Gradual(Strategy):
+    """Gradual strategy
+    -------------------
+    Will begin by cooperating.
+    If the opponent defects, will punish with defections equal to the number of times the opponent defected so far, minus one.
+    After punishing, will calm down by cooperating twice before resuming normal play.
+
+    Parameters
+    ----------
+    hard : bool, optional
+        If True, the strategy tracks and counts the opponent's defection during punishment and calming phases. Defaults to True.
+
+    Notes
+    -----
+    A softer version of this strategy (`hard=False`) reduces tracking and acts less severely during punishment and calming phases.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10 |  11 |  12 |  13 |  14 |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+    | Gradual   |  C  |  C  |  C  |  D  |  C  |  C  |  D  |  D  |  C  |  C  |  C  |  C  |  D  |  D  |  D  |
+    | Opponent  |  C  |  C  |  D  |  C  |  C  |  D  |  C  |  D  |  C  |  C  |  C  |  D  |  D  |  C  |  D  |
+    """
     def __init__(self, hard=True):
         super().__init__()
         self.name = "gradual"+("" if hard else "_soft")
@@ -242,8 +407,43 @@ class Gradual(Strategy):
     def update(self, my, his):
         self.hisLast = his
 
-
 class Mem(Strategy):
+    """Mem strategy
+    ---------------
+    A strategy that remembers the previous moves of both players and adjusts its actions based on a given genome.
+
+    Parameters
+    ----------
+    x : int
+        The number of moves to remember for the player (my moves).
+    y : int
+        The number of moves to remember for the opponent (their moves).
+    genome : str
+        A string representing the strategy's genotype, which contains all possible actions based on the history of moves.
+    name : str, optional
+        A custom name for the strategy. If not provided, the name is generated from `x`, `y`, and the genome.
+
+    Notes
+    -----
+    This strategy is based on a genotype that determines the action based on the history of moves of both players.
+    The genome is structured such that each combination of moves leads to a different action ('C' or 'D').
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|
+    | Mem(0,0,"C")  |  C  |  C  |  C  |  C  |  C  |  C  |  C  |
+    | Opponent  |  C  |  D  |  C  |  D  |  C  |  D  |  C  |
+
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|
+    | Mem(0,1,"dCD") |  D  |  C  |  C  |  C  |  D  |  C  |  D  |
+    | Opponent       |  C  |  C  |  C  |  D  |  C  |  D  |  C  |
+
+    Notes on behavior:
+    - `Mem(0,0, 'C', 'AllC')` will cooperate every time.
+    - `Mem(0,1, 'cCD', 'Tft')` behaves like Tit-For-Tat, cooperating initially and then matching the opponent's previous move.
+    """
     def __init__(self, x, y, genome, name=None):
         assert max(x,y)+(2**(x+y)) == len(genome), "incorrect genotype size"
         self.name = name
@@ -284,6 +484,23 @@ class Mem(Strategy):
 
 
 class Prober(Strategy):
+    """Prober strategy
+    ------------------
+    Will start by defecting on the first turn and cooperating on the next two turns.
+    If the opponent cooperates on both the second and third turns, it assumes the opponent is exploitable and defects thereafter.
+    Otherwise, it mirrors the opponent's last action.
+
+    Notes
+    -----
+    This strategy aims to test whether the opponent is cooperative and, if so, exploit their behavior.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|
+    | Prober    |  D  |  C  |  C  |  D  |  D  |  D  |  D  |
+    | Opponent  |  C  |  C  |  C  |  C  |  C  |  C  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "prober"
@@ -308,6 +525,24 @@ class Prober(Strategy):
 
 
 class Pavlov(Strategy):
+    """Pavlov strategy
+    ------------------
+    Also known as "Win-Stay, Lose-Shift."
+    Will start by cooperating on the first turn.
+    If the previous round's outcome was mutual cooperation or mutual defection, it will cooperate.
+    Otherwise, it will defect.
+
+    Notes
+    -----
+    Pavlov is designed to exploit mutual cooperation while adapting to an opponent's defections.
+
+    Interactions
+    ------------
+    | Turn      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-----------|-----|-----|-----|-----|-----|-----|-----|
+    | Pavlov    |  C  |  C  |  D  |  D  |  C  |  C  |  D  |
+    | Opponent  |  C  |  D  |  C  |  D  |  C  |  D  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "pavlov"
@@ -331,7 +566,26 @@ class Pavlov(Strategy):
         self.myPast += my
 
         
-class SpitefulCC(Strategy):   # CC then plays like Spiteful()    equiv to Mem(1,2,'ccCDDDDDDD')
+class SpitefulCC(Strategy):
+    """SpitefulCC strategy
+    ----------------------
+    Will cooperate on the first two turns.
+    After that, behaves like the Spiteful strategy:
+    If either the opponent or itself defected on the last turn, it will defect.
+    Otherwise, it will cooperate.
+
+    Notes
+    -----
+    Equivalent to the memory-based strategy Mem(1,2,'ccCDDDDDDD').
+    It starts with cooperation but becomes unforgiving after any defection.
+
+    Interactions
+    ------------
+    | Turn        |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |-------------|-----|-----|-----|-----|-----|-----|-----|
+    | SpitefulCC  |  C  |  C  |  C  |  D  |  D  |  D  |  D  |
+    | Opponent    |  D  |  C  |  D  |  C  |  C  |  D  |  D  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "spitefulCC"
@@ -353,8 +607,25 @@ class SpitefulCC(Strategy):   # CC then plays like Spiteful()    equiv to Mem(1,
         self.myPast += my
         self.hisPast += his
 
-        
+
 class TftSpiteful(Strategy):
+    """Tit-For-Tat Spiteful strategy
+    --------------------------------
+    Will cooperate on the first two turns.
+    Then behaves like Tit-For-Tat unless the opponent defects on two consecutive turns.
+    If two consecutive defections are detected, it switches to permanent defection (becomes spiteful).
+
+    Notes
+    -----
+    Combines elements of Tit-For-Tat and Spiteful strategies, being forgiving at first but unforgiving after repeated betrayals.
+
+    Interactions
+    ------------
+    | Turn          |  0  |  1  |  2  |  3  |  4  |  5  |  6  |
+    |---------------|-----|-----|-----|-----|-----|-----|-----|
+    | TftSpiteful   |  C  |  C  |  D  |  C  |  D  |  D  |  D  |
+    | Opponent      |  C  |  D  |  C  |  D  |  D  |  C  |  C  |
+    """
     def __init__(self):
         super().__init__()
         self.name = "TftSpiteful"
@@ -381,6 +652,19 @@ class TftSpiteful(Strategy):
 #random.seed(0)
 #np.random.seed(0)
 class Lunatic(Strategy):
+    """Lunatic strategy
+    ------------------
+    Will choose to cooperate or defect at random, with a specified probability for cooperation.
+
+    Parameters
+    ----------
+    proba : float, optional
+        Probability of cooperating. Defaults to 0.5 (equal chance of cooperation and defection).
+
+    Notes
+    -----
+    This strategy introduces randomness into the decision-making process, making it unpredictable.
+    """
     def __init__(self, proba=0.5):
         super().__init__()
         self.name = "lunatic"
@@ -392,8 +676,8 @@ class Lunatic(Strategy):
     def clone(self):
         return Lunatic(self.proba)
 
-#    def update(self, my, his):
-#        return
+    def update(self, my, his):
+        pass
 
 
 def getMem(x, y):
@@ -472,12 +756,14 @@ def getSimplifiedMem11():
             ]
 
 def getPeriodics(n):
+    assert n>=1, f"The length of the sequence should be >=1 (length given: {n})"
+
     cards = ["C", "D"]
     periodics = list()
     for i in range(n + 1):
         periodics += [p for p in itertools.product(cards, repeat=i)]
     strats = [Periodic("".join(p)) for p in periodics]
-    return strats[1:]
+    return strats
 
 
 def getClassicals():
@@ -561,8 +847,26 @@ def getAllMemory(x, y):
     return [Mem(x, y, gen) for gen in genomes]
 
 
-
 class Proba(Strategy):
+    """Proba strategy
+    -----------------
+    A probabilistic strategy that adjusts its actions based on the previous actions of both players.
+
+    Parameters
+    ----------
+    first : str
+        The action to play on the first turn, either 'C' (cooperate) or 'D' (defect).
+    p1, p2, p3, p4 : float
+        Probabilities for choosing 'C' over 'D' depending on the combination of previous actions.
+    name : str, optional
+        A custom name for the strategy. If not provided, the name is automatically generated.
+
+    Notes
+    -----
+    This strategy uses the previous actions of both players to determine the probability of cooperation for the current turn.
+    It has different probabilities based on four possible situations:
+    - (C, C), (C, D), (D, C), (D, D).
+    """
     def __init__(self, first,p1,p2,p3, p4, name=None):
         super().__init__()
         self.first=first
